@@ -904,7 +904,7 @@ const TESTIMONIALS = [
   },
 ];
 
-function CountUp({ to, suffix = "" }) {
+function CountUp({ to, suffix = "" }: { to: number; suffix?: string }) {
   const [val, setVal] = useState(0);
   const ref = useRef(null);
   useEffect(() => {
