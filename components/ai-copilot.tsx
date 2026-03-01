@@ -3,7 +3,7 @@
 import { useState, useRef, useEffect } from "react";
 import Link from "next/link";
 import { motion, AnimatePresence } from "framer-motion";
-import { Send, Sparkles, X, FileText, BookOpen, MessageSquare, ChevronDown, FilePlus, ListTodo, AlertCircle, FileUp, CheckCircle2, ArrowRight } from "lucide-react";
+import { Send, Sparkles, X, FileText, BookOpen, MessageSquare, ChevronDown, FilePlus, ListTodo, AlertCircle, FileUp, CheckCircle2, ArrowRight, Volume2, VolumeX } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Textarea } from "@/components/ui/textarea";
 import { Card, CardContent } from "@/components/ui/card";
@@ -63,6 +63,55 @@ export default function AICopilot() {
   const messagesEndRef = useRef<HTMLDivElement>(null);
   const lastRequestTimeRef = useRef<number>(0);
   const rateLimitCooldownRef = useRef<number>(0);
+
+  // ─── Sound system ───────────────────────────────────────────────
+  const [isMuted, setIsMuted] = useState(false);
+  const isMutedRef = useRef(false);
+  const hasPlayedAttentionRef = useRef(false);
+
+  const playSound = (type: 'attention' | 'open' | 'send' | 'receive') => {
+    if (isMutedRef.current || typeof window === 'undefined') return;
+    try {
+      const AudioCtx = window.AudioContext || (window as any).webkitAudioContext;
+      if (!AudioCtx) return;
+      const ctx = new AudioCtx();
+      const t = ctx.currentTime;
+      const tone = (freq: number, start: number, dur: number, vol: number) => {
+        const o = ctx.createOscillator(); const g = ctx.createGain();
+        o.connect(g); g.connect(ctx.destination);
+        o.frequency.setValueAtTime(freq, start);
+        g.gain.setValueAtTime(0, start);
+        g.gain.linearRampToValueAtTime(vol, start + 0.01);
+        g.gain.exponentialRampToValueAtTime(0.001, start + dur);
+        o.start(start); o.stop(start + dur + 0.05);
+      };
+      if (type === 'attention') { tone(523, t, 0.20, 0.12); tone(659, t + 0.16, 0.25, 0.09); }
+      if (type === 'open')      { tone(392, t, 0.15, 0.13); tone(523, t + 0.13, 0.15, 0.11); tone(659, t + 0.26, 0.28, 0.09); }
+      if (type === 'send')      { tone(700, t, 0.07, 0.08); tone(350, t + 0.05, 0.09, 0.05); }
+      if (type === 'receive')   { tone(880, t, 0.15, 0.10); tone(1047, t + 0.12, 0.20, 0.08); }
+      setTimeout(() => { ctx.close().catch(() => {}); }, 1500);
+    } catch (_e) { /* silently ignore */ }
+  };
+
+  const toggleMute = () => {
+    const next = !isMuted;
+    setIsMuted(next);
+    isMutedRef.current = next;
+    if (typeof window !== 'undefined') localStorage.setItem('ai-copilot-muted', String(next));
+  };
+
+  // Load mute preference + play attention ping once after 4 s
+  useEffect(() => {
+    if (typeof window === 'undefined') return;
+    const muted = localStorage.getItem('ai-copilot-muted') === 'true';
+    setIsMuted(muted);
+    isMutedRef.current = muted;
+    if (localStorage.getItem('ai-copilot-dismissed') === 'true' || hasPlayedAttentionRef.current) return;
+    hasPlayedAttentionRef.current = true;
+    const timer = setTimeout(() => playSound('attention'), 4000);
+    return () => clearTimeout(timer);
+  // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, []);
 
   useEffect(() => {
     if (typeof window !== "undefined") {
@@ -223,6 +272,7 @@ export default function AICopilot() {
     };
 
     setMessages((prev) => [...prev, userMessage]);
+    playSound('send');
     setInput("");
     setIsLoading(true);
     setIsProcessing(true);
@@ -315,6 +365,7 @@ export default function AICopilot() {
       };
 
       setMessages(prev => [...prev, aiMessage]);
+      playSound('receive');
 
       // Handle application updates from the AI
       if (data.type === 'application_update' && data.data) {
@@ -471,6 +522,7 @@ export default function AICopilot() {
       <div className="relative">
         <Button
           onClick={() => {
+            playSound('open');
             setIsOpen(true);
             setIsMinimized(false);
           }}
@@ -506,6 +558,16 @@ export default function AICopilot() {
             <span className="font-semibold">Scholarship Copilot</span>
           </div>
           <div className="flex items-center gap-2">
+            <button
+              onClick={(e) => {
+                e.stopPropagation();
+                toggleMute();
+              }}
+              className="p-1 hover:bg-white/10 rounded"
+              title={isMuted ? "Unmute sounds" : "Mute sounds"}
+            >
+              {isMuted ? <VolumeX className="h-4 w-4 opacity-60" /> : <Volume2 className="h-4 w-4" />}
+            </button>
             <button 
               onClick={(e) => {
                 e.stopPropagation();
