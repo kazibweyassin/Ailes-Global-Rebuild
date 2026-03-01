@@ -51,7 +51,6 @@ type QuickAction = {
 
 export default function AICopilot() {
   const [isOpen, setIsOpen] = useState(false);
-  const [isDismissed, setIsDismissed] = useState(false);
   const [isMinimized, setIsMinimized] = useState(true);
   const [input, setInput] = useState("");
   const [isLoading, setIsLoading] = useState(false);
@@ -103,10 +102,12 @@ export default function AICopilot() {
   // Load mute preference + play attention ping once after 4 s
   useEffect(() => {
     if (typeof window === 'undefined') return;
+    // Clear any stale dismissed flag so widget is always visible
+    localStorage.removeItem('ai-copilot-dismissed');
     const muted = localStorage.getItem('ai-copilot-muted') === 'true';
     setIsMuted(muted);
     isMutedRef.current = muted;
-    if (localStorage.getItem('ai-copilot-dismissed') === 'true' || hasPlayedAttentionRef.current) return;
+    if (hasPlayedAttentionRef.current) return;
     hasPlayedAttentionRef.current = true;
     const timer = setTimeout(() => playSound('attention'), 4000);
     return () => clearTimeout(timer);
@@ -114,10 +115,6 @@ export default function AICopilot() {
   }, []);
 
   useEffect(() => {
-    if (typeof window !== "undefined") {
-      const dismissed = localStorage.getItem("ai-copilot-dismissed") === "true";
-      setIsDismissed(dismissed);
-    }
     messagesEndRef.current?.scrollIntoView({ behavior: "smooth" });
   }, [messages]);
 
@@ -512,40 +509,23 @@ export default function AICopilot() {
   ];
 
   return !isOpen ? (
-    isDismissed ? null : (
     <motion.div
       className="fixed bottom-20 right-4 md:bottom-8 md:right-8 z-50"
       initial={{ opacity: 0, scale: 0.8 }}
       animate={{ opacity: 1, scale: 1 }}
       transition={{ duration: 0.3 }}
     >
-      <div className="relative">
-        <Button
-          onClick={() => {
-            playSound('open');
-            setIsOpen(true);
-            setIsMinimized(false);
-          }}
-          className="rounded-full h-16 w-16 p-0 shadow-lg bg-primary hover:bg-primary/90"
-        >
-          <Sparkles className="h-6 w-6 md:h-8 md:w-8" />
-        </Button>
-        <button
-          onClick={() => {
-            setIsDismissed(true);
-            if (typeof window !== "undefined") {
-              localStorage.setItem("ai-copilot-dismissed", "true");
-            }
-          }}
-          aria-label="Dismiss AI Copilot"
-          className="absolute -top-1 -right-1 w-5 h-5 rounded-full flex items-center justify-center shadow"
-          style={{background:'var(--navy-light)',border:'1px solid rgba(245,237,214,.2)',color:'var(--soft)'}}
-        >
-          <X className="h-3 w-3" />
-        </button>
-      </div>
+      <Button
+        onClick={() => {
+          playSound('open');
+          setIsOpen(true);
+          setIsMinimized(false);
+        }}
+        className="rounded-full h-16 w-16 p-0 shadow-lg bg-primary hover:bg-primary/90"
+      >
+        <Sparkles className="h-6 w-6 md:h-8 md:w-8" />
+      </Button>
     </motion.div>
-    )
   ) : (
     <div className="fixed bottom-20 right-4 md:bottom-8 md:right-8 z-50 w-[calc(100vw-2rem)] max-w-md">
       <Card className="w-full rounded-xl shadow-xl overflow-hidden flex flex-col" style={{background:'var(--navy)',border:'1px solid rgba(245,237,214,.12)'}}>
