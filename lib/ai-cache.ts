@@ -1,11 +1,10 @@
 /**
  * AI Response Cache System
  * Caches common scholarship questions and answers to reduce API calls
+ * Pure in-memory implementation — safe for Vercel / serverless environments
  */
 
 import { createHash } from 'crypto';
-import { readFileSync, writeFileSync, existsSync, mkdirSync, unlinkSync, readdirSync } from 'fs';
-import { join } from 'path';
 
 interface CacheEntry {
   key: string;
@@ -21,20 +20,10 @@ interface CacheEntry {
 
 class AICache {
   private memoryCache: Map<string, CacheEntry> = new Map();
-  private cacheDir: string;
   private maxMemoryEntries = 1000; // Limit memory cache size
 
   constructor() {
-    // Use .cache directory in project root
-    this.cacheDir = join(process.cwd(), '.cache', 'ai-responses');
-    this.ensureCacheDir();
-    this.loadFromDisk();
-  }
-
-  private ensureCacheDir() {
-    if (!existsSync(this.cacheDir)) {
-      mkdirSync(this.cacheDir, { recursive: true });
-    }
+    // Pure in-memory cache — no filesystem I/O required
   }
 
   /**
@@ -91,7 +80,7 @@ class AICache {
   get(message: string, context?: any): string | null {
     const key = this.generateKey(message, context);
     
-    // Check memory cache first
+    // Check memory cache
     const memoryEntry = this.memoryCache.get(key);
     if (memoryEntry) {
       // Check expiration
@@ -103,22 +92,6 @@ class AICache {
         }
       }
       return memoryEntry.response;
-    }
-    
-    // Check disk cache
-    const diskEntry = this.loadFromDisk(key);
-    if (diskEntry) {
-      // Check expiration
-      if (diskEntry.metadata?.expiresAt) {
-        const expiresAt = new Date(diskEntry.metadata.expiresAt);
-        if (expiresAt < new Date()) {
-          this.deleteFromDisk(key);
-          return null;
-        }
-      }
-      // Load into memory cache
-      this.memoryCache.set(key, diskEntry);
-      return diskEntry.response;
     }
     
     return null;
@@ -153,9 +126,6 @@ class AICache {
       }
     }
     this.memoryCache.set(key, entry);
-    
-    // Persist to disk
-    this.saveToDisk(entry);
   }
 
   /**
@@ -170,17 +140,6 @@ class AICache {
    */
   clear(): void {
     this.memoryCache.clear();
-    // Clear disk cache files
-    try {
-      const files = readdirSync(this.cacheDir);
-      files.forEach((file: string) => {
-        if (file.endsWith('.json')) {
-          unlinkSync(join(this.cacheDir, file));
-        }
-      });
-    } catch (error) {
-      console.error('[AI Cache] Error clearing disk cache:', error);
-    }
   }
 
   /**
@@ -210,7 +169,6 @@ class AICache {
 
       if (shouldInvalidate) {
         keysToDelete.push(key);
-        this.deleteFromDisk(key);
         invalidated++;
       }
     });
@@ -232,7 +190,6 @@ class AICache {
         const expiresAt = new Date(entry.metadata.expiresAt);
         if (expiresAt < now) {
           keysToDelete.push(key);
-          this.deleteFromDisk(key);
           cleaned++;
         }
       }
@@ -240,53 +197,6 @@ class AICache {
 
     keysToDelete.forEach((key) => this.memoryCache.delete(key));
     return cleaned;
-  }
-
-  /**
-   * Load entry from disk
-   */
-  private loadFromDisk(key?: string): CacheEntry | null {
-    try {
-      if (key) {
-        const filePath = join(this.cacheDir, `${key}.json`);
-        if (existsSync(filePath)) {
-          const content = readFileSync(filePath, 'utf-8');
-          return JSON.parse(content);
-        }
-      } else {
-        // Load all cache files on startup (optional, for warm-up)
-        // This could be expensive, so we'll do lazy loading instead
-      }
-    } catch (error) {
-      console.error('[AI Cache] Error loading from disk:', error);
-    }
-    return null;
-  }
-
-  /**
-   * Save entry to disk
-   */
-  private saveToDisk(entry: CacheEntry): void {
-    try {
-      const filePath = join(this.cacheDir, `${entry.key}.json`);
-      writeFileSync(filePath, JSON.stringify(entry, null, 2), 'utf-8');
-    } catch (error) {
-      console.error('[AI Cache] Error saving to disk:', error);
-    }
-  }
-
-  /**
-   * Delete entry from disk
-   */
-  private deleteFromDisk(key: string): void {
-    try {
-      const filePath = join(this.cacheDir, `${key}.json`);
-      if (existsSync(filePath)) {
-        unlinkSync(filePath);
-      }
-    } catch (error) {
-      console.error('[AI Cache] Error deleting from disk:', error);
-    }
   }
 
   /**

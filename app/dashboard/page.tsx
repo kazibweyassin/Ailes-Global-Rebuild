@@ -23,24 +23,6 @@ interface Application {
 
 /* ─── Styles ─── */
 const STYLES = `
-  @import url('https://fonts.googleapis.com/css2?family=Cormorant+Garant:ital,wght@0,600;0,700;1,600&family=Sora:wght@300;400;500;600&display=swap');
-
-  :root {
-    --midnight:   #080D1A;
-    --navy:       #0E1729;
-    --navy-light: #172038;
-    --navy-hover: #1C2A48;
-    --gold:       #E8A020;
-    --gold-light: #F5C55A;
-    --terra-light:#E07848;
-    --green:      #2EBF8A;
-    --cream:      #F5EDD6;
-    --ivory:      #FDF8F0;
-    --soft:       #C4CFDF;
-    --muted:      #8A97AA;
-    --border:     rgba(245,237,214,.07);
-  }
-
   .db {
     font-family: 'Sora', sans-serif;
     background: var(--midnight);
@@ -342,6 +324,48 @@ const STYLES = `
   .db-check-label-done { color:var(--cream); }
   .db-check-label-todo { color:var(--muted); }
 
+  /* ── SKELETON SHIMMER ── */
+  @keyframes db-shimmer {
+    0%   { background-position: -600px 0; }
+    100% { background-position:  600px 0; }
+  }
+  .db-skel {
+    background: linear-gradient(90deg,
+      rgba(245,237,214,.04) 25%,
+      rgba(245,237,214,.09) 50%,
+      rgba(245,237,214,.04) 75%
+    );
+    background-size: 1200px 100%;
+    animation: db-shimmer 1.8s ease infinite;
+    border-radius: 6px;
+  }
+  .db-skel-stats {
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+    gap: 2px;
+    margin-bottom: 28px;
+  }
+  @media(max-width:900px){ .db-skel-stats { grid-template-columns: repeat(2,1fr); } }
+  .db-skel-stat {
+    background: var(--navy);
+    border-radius: 12px;
+    padding: 24px 20px;
+    display: flex; align-items: center; gap: 16px;
+  }
+  .db-skel-stat-icon { width: 44px; height: 44px; border-radius: 10px; flex-shrink: 0; }
+  .db-skel-grid {
+    display: grid;
+    grid-template-columns: 1fr 320px;
+    gap: 24px;
+  }
+  @media(max-width:1024px){ .db-skel-grid { grid-template-columns: 1fr; } }
+  .db-skel-panel {
+    background: var(--navy);
+    border: 1px solid rgba(245,237,214,.06);
+    border-radius: 12px;
+    padding: 24px 28px;
+  }
+
   /* ── loading / error / empty ── */
   .db-loading {
     display:flex; align-items:center; justify-content:center; gap:12px;
@@ -406,6 +430,7 @@ export default function DashboardPage() {
   const [recentActivity, setActivity]   = useState<any[]>([]);
   const [applications, setApplications] = useState<Application[]>([]);
   const [copilotRequests, setCopilot]   = useState<any[]>([]);
+  const [userProfile, setUserProfile]   = useState<any>(null);
 
   useEffect(() => {
     if (status === "loading") return;
@@ -419,13 +444,16 @@ export default function DashboardPage() {
     (async () => {
       try {
         setLoading(true); setError(null);
-        const [savedRes, deadlinesRes, matchRes, appsRes, copilotRes] = await Promise.all([
+        const [savedRes, deadlinesRes, matchRes, appsRes, copilotRes, profileRes] = await Promise.all([
           fetch("/api/saved/scholarships").catch(() => null),
           fetch("/api/scholarships/deadlines").catch(() => null),
           fetch("/api/scholarships/match").catch(() => null),
           fetch("/api/applications").catch(() => null),
           fetch("/api/copilot/requests").catch(() => null),
+          fetch("/api/user/profile").catch(() => null),
         ]);
+
+        if (profileRes?.ok) { const d = await profileRes.json(); setUserProfile(d.user || null); }
 
         let saved: Scholarship[] = [];
         if (savedRes?.ok) { const d = await savedRes.json(); saved = d.scholarships || []; setSaved(saved); }
@@ -444,7 +472,7 @@ export default function DashboardPage() {
           setDeadlines(upcoming);
         }
 
-        let matchScore = 85;
+        let matchScore = 0;
         if (matchRes?.ok) {
           const d = await matchRes.json();
           if (d.matches?.length) matchScore = Math.round(d.matches.reduce((s: number, m: any) => s + m.matchScore, 0) / d.matches.length);
@@ -482,6 +510,18 @@ export default function DashboardPage() {
 
   const firstName = session?.user?.name?.split(" ")[0] || "there";
 
+  // Data-driven profile completion
+  const completionFields = [
+    { done: Boolean(userProfile?.name), label: "Basic Information" },
+    { done: Boolean(userProfile?.country), label: "Country" },
+    { done: Boolean(userProfile?.phone), label: "Phone Number" },
+    { done: Boolean(userProfile?.dateOfBirth), label: "Date of Birth" },
+    { done: Boolean(userProfile?.gender), label: "Gender" },
+    { done: Boolean(session?.user?.image || userProfile?.image), label: "Profile Photo" },
+    { done: Boolean(userProfile?.email), label: "Email Verified" },
+  ];
+  const doneCount = completionFields.filter(f => f.done).length;
+  const completionPct = Math.round((doneCount / completionFields.length) * 100);
   return (
     <div className="db">
       <style dangerouslySetInnerHTML={{ __html: STYLES }} />
@@ -505,9 +545,48 @@ export default function DashboardPage() {
           </div>
         )}
 
-        {/* ══ Loading ══ */}
+        {/* ══ Loading Skeleton ══ */}
         {loading && (
-          <div className="db-loading"><div className="db-spinner" /> Loading your dashboard…</div>
+          <div>
+            <div className="db-skel-stats">
+              {[...Array(4)].map((_,i) => (
+                <div key={i} className="db-skel-stat">
+                  <div className="db-skel db-skel-stat-icon" />
+                  <div style={{flex:1,display:'flex',flexDirection:'column',gap:'8px'}}>
+                    <div className="db-skel" style={{height:'20px',width:'65%'}} />
+                    <div className="db-skel" style={{height:'11px',width:'50%'}} />
+                  </div>
+                </div>
+              ))}
+            </div>
+            <div className="db-skel-grid">
+              <div style={{display:'flex',flexDirection:'column',gap:'20px'}}>
+                <div className="db-skel-panel">
+                  <div className="db-skel" style={{height:'15px',width:'38%',marginBottom:'8px'}} />
+                  <div className="db-skel" style={{height:'11px',width:'58%',marginBottom:'24px'}} />
+                  {[100,82,91,68].map((w,i) => (
+                    <div key={i} className="db-skel" style={{height:'13px',width:`${w}%`,marginBottom:'14px'}} />
+                  ))}
+                </div>
+                <div className="db-skel-panel">
+                  <div className="db-skel" style={{height:'15px',width:'42%',marginBottom:'8px'}} />
+                  <div className="db-skel" style={{height:'11px',width:'62%',marginBottom:'24px'}} />
+                  {[100,75,88].map((w,i) => (
+                    <div key={i} className="db-skel" style={{height:'13px',width:`${w}%`,marginBottom:'14px'}} />
+                  ))}
+                </div>
+              </div>
+              <div style={{display:'flex',flexDirection:'column',gap:'20px'}}>
+                <div className="db-skel-panel">
+                  <div className="db-skel" style={{height:'15px',width:'55%',marginBottom:'8px'}} />
+                  <div className="db-skel" style={{height:'11px',width:'70%',marginBottom:'24px'}} />
+                  {[88,70,80,60,72].map((w,i) => (
+                    <div key={i} className="db-skel" style={{height:'13px',width:`${w}%`,marginBottom:'14px'}} />
+                  ))}
+                </div>
+              </div>
+            </div>
+          </div>
         )}
 
         {!loading && (
@@ -710,19 +789,14 @@ export default function DashboardPage() {
                   </div>
                   <div className="db-panel-body">
                     <div className="db-progress-meta">
-                      <span className="db-progress-pct">60% Complete</span>
-                      <span className="db-progress-frac">4 / 7 sections</span>
+                      <span className="db-progress-pct">{completionPct}% Complete</span>
+                      <span className="db-progress-frac">{doneCount} / {completionFields.length} sections</span>
                     </div>
                     <div className="db-progress-bar-bg">
-                      <div className="db-progress-bar-fill" style={{ width:"60%" }} />
+                      <div className="db-progress-bar-fill" style={{ width:`${completionPct}%` }} />
                     </div>
                     <div className="db-checklist">
-                      {[
-                        { done:true,  label:"Basic Information" },
-                        { done:true,  label:"Education Background" },
-                        { done:false, label:"Test Scores" },
-                        { done:false, label:"Documents" },
-                      ].map((item) => (
+                      {completionFields.map((item) => (
                         <div className="db-check-row" key={item.label}>
                           <span className={item.done ? "db-check-icon-done" : "db-check-icon-todo"}>
                             {item.done ? "✓" : "○"}

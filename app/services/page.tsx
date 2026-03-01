@@ -5,21 +5,6 @@ import Link from "next/link";
 
 /* ─── Design tokens (same system as HomeClient + AboutPage) ─── */
 const STYLES = `
-  @import url('https://fonts.googleapis.com/css2?family=Cormorant+Garant:ital,wght@0,400;0,600;0,700;1,400;1,600&family=Sora:wght@300;400;500;600&display=swap');
-
-  :root {
-    --midnight:   #080D1A;
-    --navy:       #0E1729;
-    --navy-light: #172038;
-    --gold:       #E8A020;
-    --gold-light: #F5C55A;
-    --terra:      #C45A2A;
-    --terra-light:#E07848;
-    --cream:      #F5EDD6;
-    --ivory:      #FDF8F0;
-    --soft:       #C4CFDF;
-  }
-
   .svc-page {
     font-family: 'Sora', sans-serif;
     background: var(--midnight);

@@ -22,10 +22,10 @@ export function getAIClient(): AIClient {
     const trimmedKey = geminiKey.trim();
     if (trimmedKey.length > 0) {
       try {
-        console.log('[AI Client] ✅ Using Google Gemini (GEMINI_API_KEY found)');
+        if (process.env.NODE_ENV === 'development') console.log('[AI Client] ✅ Using Google Gemini (GEMINI_API_KEY found)');
         return { type: 'gemini', client: new GoogleGenerativeAI(trimmedKey) };
       } catch (error) {
-        console.error('[AI Client] ❌ Error initializing Gemini:', error);
+        if (process.env.NODE_ENV === 'development') console.error('[AI Client] ❌ Error initializing Gemini:', error);
         // Fall through to OpenAI or null
       }
     }
@@ -38,22 +38,24 @@ export function getAIClient(): AIClient {
     // Validate OpenAI key format (should start with sk-)
     if (trimmedKey.startsWith('sk-') || trimmedKey.startsWith('sk-proj-')) {
       try {
-        console.log('[AI Client] ✅ Using OpenAI');
+        if (process.env.NODE_ENV === 'development') console.log('[AI Client] ✅ Using OpenAI');
         return { type: 'openai', client: new OpenAI({ apiKey: trimmedKey }) };
       } catch (error) {
-        console.error('[AI Client] ❌ Error initializing OpenAI:', error);
+        if (process.env.NODE_ENV === 'development') console.error('[AI Client] ❌ Error initializing OpenAI:', error);
         // Fall through to null
       }
     } else {
-      console.warn('[AI Client] ⚠️ OpenAI key found but format invalid (should start with sk-). Key length:', trimmedKey.length);
+      if (process.env.NODE_ENV === 'development') console.warn('[AI Client] ⚠️ OpenAI key found but format invalid (should start with sk-). Key length:', trimmedKey.length);
     }
   }
   
   // No AI available - return null for template fallback
-  console.warn('[AI Client] ⚠️ NO AI CONFIGURED - Using template fallback');
-  console.warn('[AI Client] To enable AI:');
-  console.warn('[AI Client]   1. Set GEMINI_API_KEY (free): https://makersuite.google.com/app/apikey');
-  console.warn('[AI Client]   2. Or set OPENAI_API_KEY (paid): https://platform.openai.com/api-keys');
+  if (process.env.NODE_ENV === 'development') {
+    console.warn('[AI Client] ⚠️ NO AI CONFIGURED - Using template fallback');
+    console.warn('[AI Client] To enable AI:');
+    console.warn('[AI Client]   1. Set GEMINI_API_KEY (free): https://makersuite.google.com/app/apikey');
+    console.warn('[AI Client]   2. Or set OPENAI_API_KEY (paid): https://platform.openai.com/api-keys');
+  }
   return null;
 }
 
@@ -101,17 +103,17 @@ export async function generateAIResponse(
       
       for (const modelName of modelNames) {
         try {
-          console.log(`[AI Client] Trying Gemini model: ${modelName}`);
+          if (process.env.NODE_ENV === 'development') console.log(`[AI Client] Trying Gemini model: ${modelName}`);
           const geminiModel = aiClient.client.getGenerativeModel({ model: modelName });
           const prompt = `${systemPrompt}\n\n${userPrompt}`;
           const result = await geminiModel.generateContent(prompt);
           const text = result.response.text();
           if (text) {
-            console.log(`[AI Client] ✅ Successfully used model: ${modelName}`);
+            if (process.env.NODE_ENV === 'development') console.log(`[AI Client] ✅ Successfully used model: ${modelName}`);
             return text;
           }
         } catch (error: any) {
-          console.warn(`[AI Client] ⚠️ Model ${modelName} failed:`, error.message);
+          if (process.env.NODE_ENV === 'development') console.warn(`[AI Client] ⚠️ Model ${modelName} failed:`, error.message);
           lastError = error;
           // Continue to next model
           continue;
@@ -122,7 +124,7 @@ export async function generateAIResponse(
       throw new Error(`All Gemini models failed. Last error: ${lastError?.message || 'Unknown error'}. Available models: ${modelNames.join(', ')}`);
     }
   } catch (error: any) {
-    console.error('AI generation error:', error);
+    if (process.env.NODE_ENV === 'development') console.error('AI generation error:', error);
     throw new Error(`AI generation failed: ${error.message}`);
   }
 

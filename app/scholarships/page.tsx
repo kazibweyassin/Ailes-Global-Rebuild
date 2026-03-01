@@ -1,6 +1,6 @@
 "use client";
 
-import { useState, useEffect } from "react";
+import { useState, useEffect, useRef } from "react";
 import Link from "next/link";
 import { motion, AnimatePresence } from "framer-motion";
 import {
@@ -14,24 +14,6 @@ import EmailCapturePopup from "@/components/email-capture-popup";
    STYLES
 ───────────────────────────────────────────────────────────────────────────── */
 const STYLES = `
-  @import url('https://fonts.googleapis.com/css2?family=Cormorant+Garant:ital,wght@0,400;0,600;0,700;1,400;1,600&family=Sora:wght@300;400;500;600&display=swap');
-
-  :root {
-    --midnight: #080D1A;
-    --navy:     #0E1729;
-    --navy-light: #172038;
-    --gold:     #E8A020;
-    --gold-light: #F5C55A;
-    --terra:    #C45A2A;
-    --terra-light: #E07848;
-    --cream:    #F5EDD6;
-    --ivory:    #FDF8F0;
-    --soft:     #C4CFDF;
-    --success:  #22C55E;
-    --danger:   #EF4444;
-    --warning:  #F59E0B;
-  }
-
   * { box-sizing: border-box; }
 
   .sp-page {
@@ -562,6 +544,29 @@ const STYLES = `
   }
   .sp-state-body { font-size: 13px; font-weight: 300; color: var(--soft); }
 
+  /* ── SKELETON SHIMMER ── */
+  @keyframes sp-shimmer {
+    0%   { background-position: -600px 0; }
+    100% { background-position:  600px 0; }
+  }
+  .sp-skel {
+    background: linear-gradient(90deg,
+      rgba(245,237,214,.04) 25%,
+      rgba(245,237,214,.09) 50%,
+      rgba(245,237,214,.04) 75%
+    );
+    background-size: 1200px 100%;
+    animation: sp-shimmer 1.8s ease infinite;
+    border-radius: 5px;
+  }
+  .sp-skel-card {
+    background: var(--navy);
+    border: 1px solid rgba(245,237,214,.07);
+    border-radius: 12px;
+    padding: 26px;
+    display: flex; flex-direction: column; gap: 10px;
+  }
+
   /* ── PAGINATION ── */
   .sp-pagination {
     display: flex; align-items: center;
@@ -639,6 +644,43 @@ const STYLES = `
     box-shadow: 0 12px 32px rgba(232,160,32,0.22);
   }
 
+  /* ── QUICK FILTER CHIPS ── */
+  .sp-chips {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 8px;
+    margin-bottom: 20px;
+  }
+  .sp-chip {
+    display: inline-flex; align-items: center; gap: 6px;
+    font-family: 'Sora', sans-serif;
+    font-size: 12px; font-weight: 500;
+    padding: 6px 14px;
+    border-radius: 100px;
+    border: 1px solid rgba(245,237,214,0.12);
+    background: transparent;
+    color: var(--soft);
+    cursor: pointer;
+    transition: border-color 0.2s, background 0.2s, color 0.2s, transform 0.15s;
+    white-space: nowrap;
+  }
+  .sp-chip:hover {
+    border-color: rgba(232,160,32,0.3);
+    color: var(--cream);
+    transform: translateY(-1px);
+  }
+  .sp-chip.active {
+    background: rgba(232,160,32,0.12);
+    border-color: rgba(232,160,32,0.4);
+    color: var(--gold-light);
+  }
+  .sp-chip-dot {
+    width: 6px; height: 6px;
+    border-radius: 50%;
+    background: currentColor;
+    flex-shrink: 0;
+  }
+
   /* ChevronDown utility */
   .sp-chevron { display: inline-block; }
 `;
@@ -651,6 +693,7 @@ export default function ScholarshipsPage() {
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState("");
   const [searchTerm, setSearchTerm] = useState("");
+  const [rawSearch, setRawSearch] = useState("");
   const [selectedCountry, setSelectedCountry] = useState("all");
   const [selectedType, setSelectedType] = useState("all");
   const [forWomenOnly, setForWomenOnly] = useState(false);
@@ -697,6 +740,12 @@ export default function ScholarshipsPage() {
     fetchSaved();
     fetchCountries();
   }, []);
+
+  // Debounce raw search input → debounced searchTerm (300ms)
+  useEffect(() => {
+    const timer = setTimeout(() => setSearchTerm(rawSearch), 300);
+    return () => clearTimeout(timer);
+  }, [rawSearch]);
 
   useEffect(() => {
     setCurrentPage(1);
@@ -817,7 +866,7 @@ export default function ScholarshipsPage() {
     setSelectedDeadline("all"); setForWomenOnly(false);
     setForAfricanOnly(false); setCoversTuition(false);
     setCoversLiving(false); setNoTestRequired(false);
-    setMinAmount(""); setMaxAmount(""); setSearchTerm("");
+    setMinAmount(""); setMaxAmount(""); setRawSearch(""); setSearchTerm("");
   };
 
   const getDeadlineMeta = (days: number) => {
@@ -978,11 +1027,11 @@ export default function ScholarshipsPage() {
               <input
                 className="sp-search-input"
                 placeholder="Search by scholarship name or provider…"
-                value={searchTerm}
-                onChange={e => setSearchTerm(e.target.value)}
+                value={rawSearch}
+                onChange={e => setRawSearch(e.target.value)}
               />
-              {searchTerm && (
-                <button className="sp-search-clear" onClick={() => setSearchTerm("")}>
+              {rawSearch && (
+                <button className="sp-search-clear" onClick={() => { setRawSearch(""); setSearchTerm(""); }}>
                   <X size={14} />
                 </button>
               )}
@@ -1088,10 +1137,52 @@ export default function ScholarshipsPage() {
             </Link>
           </div>
 
+          {/* ── Quick filter chips ── */}
+          <div className="sp-chips">
+            {[
+              { label: "Closing Soon",     active: selectedDeadline === "30",   onClick: () => setSelectedDeadline(selectedDeadline === "30" ? "all" : "30"),     dot: "var(--danger)" },
+              { label: "Full Scholarship",  active: selectedType === "FULL",      onClick: () => setSelectedType(selectedType === "FULL" ? "all" : "FULL"),         dot: "var(--gold)" },
+              { label: "Women Only",        active: forWomenOnly,                 onClick: () => setForWomenOnly(v => !v),                                           dot: "#F9A8D4" },
+              { label: "No Test Required",  active: noTestRequired,              onClick: () => setNoTestRequired(v => !v),                                         dot: "var(--soft)" },
+              { label: "Africa Targeted",   active: forAfricanOnly,              onClick: () => setForAfricanOnly(v => !v),                                         dot: "var(--terra-light)" },
+            ].map(chip => (
+              <button
+                key={chip.label}
+                className={`sp-chip${chip.active ? " active" : ""}`}
+                onClick={chip.onClick}
+                style={chip.active ? { color: chip.dot } : {}}
+              >
+                <span className="sp-chip-dot" style={{ background: chip.dot, opacity: chip.active ? 1 : 0.4 }} />
+                {chip.label}
+              </button>
+            ))}
+          </div>
+
           {/* Grid / States */}
           {loading ? (
-            <div className="sp-state-center">
-              <Loader2 size={28} color="var(--gold)" style={{ animation: "spin 1s linear infinite" }} />
+            <div className="sp-grid">
+              {[...Array(6)].map((_,i) => (
+                <div key={i} className="sp-skel-card">
+                  <div style={{display:'flex',justifyContent:'space-between',alignItems:'flex-start',gap:'10px'}}>
+                    <div className="sp-skel" style={{height:'20px',width:'68%'}} />
+                    <div className="sp-skel" style={{height:'20px',width:'54px',borderRadius:'100px'}} />
+                  </div>
+                  <div className="sp-skel" style={{height:'12px',width:'44%'}} />
+                  <div style={{display:'flex',gap:'6px'}}>
+                    <div className="sp-skel" style={{height:'20px',width:'54px',borderRadius:'100px'}} />
+                    <div className="sp-skel" style={{height:'20px',width:'68px',borderRadius:'100px'}} />
+                  </div>
+                  <div style={{display:'flex',gap:'12px',marginTop:'4px'}}>
+                    <div className="sp-skel" style={{height:'11px',width:'76px'}} />
+                    <div className="sp-skel" style={{height:'11px',width:'58px'}} />
+                    <div className="sp-skel" style={{height:'11px',width:'68px'}} />
+                  </div>
+                  <div style={{marginTop:'auto',paddingTop:'14px',display:'flex',justifyContent:'space-between',alignItems:'center'}}>
+                    <div className="sp-skel" style={{height:'30px',width:'88px',borderRadius:'4px'}} />
+                    <div className="sp-skel" style={{height:'30px',width:'30px',borderRadius:'8px'}} />
+                  </div>
+                </div>
+              ))}
             </div>
           ) : sortedScholarships.length === 0 ? (
             <div className="sp-state-center">

@@ -222,9 +222,25 @@ export function calculateMatchScore(
 
   if (scholarship.forAfrican && user.country) {
     const africanCountries = [
-      "Nigeria", "Kenya", "Ghana", "Tanzania", "Uganda", "Ethiopia", "South Africa", "Egypt",
-      "Senegal", "Cameroon", "Morocco", "Tunisia", "Algeria", "Ivory Coast", "Rwanda", "Zambia",
-      "Zimbabwe", "Botswana", "Namibia", "Malawi", "Mozambique", "Madagascar", "Mali", "Burkina Faso"
+      // North Africa
+      "Algeria", "Egypt", "Libya", "Morocco", "Sudan", "Tunisia",
+      // West Africa
+      "Benin", "Burkina Faso", "Cape Verde", "Gambia", "Ghana", "Guinea",
+      "Guinea-Bissau", "Ivory Coast", "Liberia", "Mali", "Mauritania",
+      "Niger", "Nigeria", "Senegal", "Sierra Leone", "Togo",
+      // East Africa
+      "Burundi", "Comoros", "Djibouti", "Eritrea", "Ethiopia", "Kenya",
+      "Madagascar", "Malawi", "Mauritius", "Mozambique", "Rwanda",
+      "Seychelles", "Somalia", "South Sudan", "Tanzania", "Uganda",
+      "Zambia", "Zimbabwe",
+      // Central Africa
+      "Angola", "Cameroon", "Central African Republic", "Chad",
+      "Democratic Republic of Congo", "Equatorial Guinea", "Gabon",
+      "Republic of Congo", "Sao Tome and Principe",
+      // Southern Africa
+      "Botswana", "Eswatini", "Lesotho", "Namibia", "South Africa",
+      // Common alternate spellings
+      "Côte d'Ivoire", "DR Congo", "Congo",
     ];
     const isAfrican = africanCountries.some(
       (country) => country.toLowerCase() === user.country?.toLowerCase()
@@ -298,6 +314,24 @@ export function calculateMatchScore(
     reasoning,
     isGoodMatch,
   };
+}
+
+/**
+ * Simplified match score adapter for route handlers
+ * Returns {score, reasons, missing} shape compatible with existing API responses
+ */
+export function calculateMatchScoreSimple(
+  user: any,
+  scholarship: any
+): { score: number; reasons: string[]; missing: string[] } {
+  const result = calculateMatchScore(user as UserProfile, scholarship as ScholarshipData);
+  const reasons = result.reasoning.filter(r =>
+    r.startsWith('✅') || r.startsWith('👩') || r.startsWith('🌍') || r.startsWith('🎯')
+  );
+  const missing = result.reasoning.filter(r =>
+    r.startsWith('❌') || r.startsWith('⚠️') || r.startsWith('📝') || r.startsWith('📚') || r.startsWith('🎓') || r.startsWith('📍')
+  );
+  return { score: result.overallScore, reasons, missing };
 }
 
 /**

@@ -561,9 +561,6 @@ enum SubscriptionStatus {
   ACTIVE
   EXPIRED
   CANCELLED
-  PREMIUM     // $5/month tier
-  STANDARD    // $299 one-time
-  MENTORSHIP  // $799 one-time
 }
 
 model StudentIntake {

@@ -1,6 +1,7 @@
 "use client";
 
 import { useState, useEffect } from "react";
+import { useSession } from "next-auth/react";
 import { X, Mail, CheckCircle2, Loader2 } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
@@ -8,6 +9,7 @@ import { Card, CardContent } from "@/components/ui/card";
 import { motion, AnimatePresence } from "framer-motion";
 
 export default function EmailCapturePopup() {
+  const { status } = useSession();
   const [show, setShow] = useState(false);
   const [email, setEmail] = useState("");
   const [loading, setLoading] = useState(false);
@@ -15,6 +17,11 @@ export default function EmailCapturePopup() {
   const [hasShown, setHasShown] = useState(false);
 
   useEffect(() => {
+    // Never show to authenticated users
+    if (status === "authenticated") return;
+    // Wait until session check is complete before scheduling
+    if (status === "loading") return;
+
     // Check if user has already seen/submitted this popup in this session
     const hasSeenPopup = sessionStorage.getItem("email-capture-shown");
     if (hasSeenPopup) {
@@ -29,7 +36,7 @@ export default function EmailCapturePopup() {
     }, 40000); // 40 seconds
 
     return () => clearTimeout(timer);
-  }, []);
+  }, [status]);
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();

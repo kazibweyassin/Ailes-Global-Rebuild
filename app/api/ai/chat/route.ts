@@ -2,6 +2,7 @@ import { NextResponse } from 'next/server';
 import { prisma } from '@/lib/prisma';
 import { getAIClient, AIClient } from '@/lib/ai-client';
 import { getAICache } from '@/lib/ai-cache';
+import { calculateMatchScoreSimple as calculateMatchScore } from '@/lib/matching-engine';
 import { 
   getScholarshipTemplate, 
   getGeneralTemplate, 
@@ -89,111 +90,6 @@ async function retryWithBackoff<T>(
   }
   
   throw lastError;
-}
-
-// Calculate scholarship match score (same logic as match API)
-function calculateMatchScore(user: any, scholarship: any): { score: number; reasons: string[]; missing: string[] } {
-  let score = 0;
-  const reasons: string[] = [];
-  const missing: string[] = [];
-  const maxScore = 100;
-
-  // Country match (20 points)
-  // Handle both array and string formats for targetCountries
-  const targetCountries = Array.isArray(scholarship.targetCountries) 
-    ? scholarship.targetCountries 
-    : (scholarship.targetCountries ? [scholarship.targetCountries] : []);
-  
-  if (targetCountries.length > 0) {
-    if (user.country && targetCountries.includes(user.country)) {
-      score += 20;
-      reasons.push(`Available for students from ${user.country}`);
-    } else {
-      missing.push(`Must be from: ${targetCountries.join(", ")}`);
-    }
-  } else {
-    score += 20; // No country restriction
-  }
-
-  // GPA requirement (15 points)
-  if (scholarship.minGPA) {
-    if (user.currentGPA && user.currentGPA >= scholarship.minGPA) {
-      score += 15;
-      reasons.push(`Your GPA (${user.currentGPA}) meets the requirement`);
-    } else {
-      missing.push(`Minimum GPA ${scholarship.minGPA} required${user.currentGPA ? ` (you have ${user.currentGPA})` : ""}`);
-    }
-  } else {
-    score += 15;
-  }
-
-  // Field of study match (15 points)
-  if (scholarship.fieldOfStudy && scholarship.fieldOfStudy.length > 0) {
-    if (user.fieldOfStudy && scholarship.fieldOfStudy.includes(user.fieldOfStudy)) {
-      score += 15;
-      reasons.push(`Matches your field: ${user.fieldOfStudy}`);
-    } else {
-      missing.push(`Field must be: ${scholarship.fieldOfStudy.join(", ")}`);
-    }
-  } else {
-    score += 15;
-  }
-
-  // Degree level match (10 points)
-  if (scholarship.degreeLevel && scholarship.degreeLevel.length > 0) {
-    if (user.degreeLevel && scholarship.degreeLevel.includes(user.degreeLevel)) {
-      score += 10;
-      reasons.push(`Available for ${user.degreeLevel} students`);
-    } else {
-      missing.push(`Only for: ${scholarship.degreeLevel.join(", ")}`);
-    }
-  } else {
-    score += 10;
-  }
-
-  // Gender-specific scholarships (10 points)
-  if (scholarship.forWomen) {
-    if (user.gender?.toLowerCase() === "female") {
-      score += 10;
-      reasons.push(`Specifically for women`);
-    } else {
-      missing.push(`Only for women applicants`);
-    }
-  } else {
-    score += 10;
-  }
-
-  // Test scores (20 points total)
-  let testScore = 0;
-  if (scholarship.requiresIELTS) {
-    if (user.ieltsScore && scholarship.minIELTS && user.ieltsScore >= scholarship.minIELTS) {
-      testScore += 5;
-      reasons.push(`IELTS ${user.ieltsScore} meets requirement`);
-    } else {
-      missing.push(`IELTS ${scholarship.minIELTS || "score"} required`);
-    }
-  } else {
-    testScore += 5;
-  }
-
-  if (scholarship.requiresTOEFL) {
-    if (user.toeflScore && scholarship.minTOEFL && user.toeflScore >= scholarship.minTOEFL) {
-      testScore += 5;
-      reasons.push(`TOEFL ${user.toeflScore} meets requirement`);
-    } else {
-      missing.push(`TOEFL ${scholarship.minTOEFL || "score"} required`);
-    }
-  } else {
-    testScore += 5;
-  }
-
-  score += testScore;
-
-  return { 
-    score: Math.min(score, maxScore), 
-    reasons, 
-    missing 
-  };
 }
 
 // Extract user profile from message or context

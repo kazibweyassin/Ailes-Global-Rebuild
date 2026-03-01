@@ -1,6 +1,16 @@
 import { NextResponse } from "next/server"
+import { z } from "zod"
 import { auth } from "@/lib/auth"
 import { prisma } from "@/lib/prisma"
+
+const profileUpdateSchema = z.object({
+  name:        z.string().max(100).optional(),
+  phone:       z.string().max(20).optional(),
+  country:     z.string().max(100).optional(),
+  gender:      z.string().max(20).optional(),
+  dateOfBirth: z.string().optional(),
+  image:       z.string().url("image must be a valid URL").max(500).optional(),
+})
 
 // GET /api/user/profile - Get current user profile
 export async function GET() {
@@ -61,7 +71,14 @@ export async function PUT(req: Request) {
     }
 
     const body = await req.json()
-    const { name, phone, country, dateOfBirth, gender, image } = body
+    const parsed = profileUpdateSchema.safeParse(body)
+    if (!parsed.success) {
+      return NextResponse.json(
+        { error: "Invalid input", details: parsed.error.flatten().fieldErrors },
+        { status: 400 }
+      )
+    }
+    const { name, phone, country, dateOfBirth, gender, image } = parsed.data
 
     const updatedUser = await prisma.user.update({
       where: { id: session.user.id },

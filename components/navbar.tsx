@@ -3,24 +3,10 @@
 import Link from "next/link";
 import Image from "next/image";
 import { useState, useEffect } from "react";
-import { Menu, X, Heart, LayoutDashboard, Shield, LogIn, LogOut, Sparkles, ChevronDown } from "lucide-react";
+import { Menu, X, Heart, LayoutDashboard, Shield, LogIn, LogOut, ArrowRight, ChevronDown } from "lucide-react";
 import { signOut, useSession } from "next-auth/react";
 
 const STYLES = `
-  @import url('https://fonts.googleapis.com/css2?family=Sora:wght@300;400;500;600&display=swap');
-
-  :root {
-    --midnight:   #080D1A;
-    --navy:       #0E1729;
-    --navy-light: #172038;
-    --gold:       #E8A020;
-    --gold-light: #F5C55A;
-    --cream:      #F5EDD6;
-    --ivory:      #FDF8F0;
-    --soft:       #C4CFDF;
-    --terra-light:#E07848;
-  }
-
   /* ── Navbar shell ── */
   .nav-root {
     position: fixed;
@@ -494,7 +480,7 @@ export function Navbar() {
 
             {/* Primary CTA — always visible */}
             <Link href="/find-scholarships" className="nav-btn-primary">
-              <Sparkles size={13} />
+              <ArrowRight size={13} />
               Find Scholarships
             </Link>
 
@@ -539,7 +525,7 @@ export function Navbar() {
 
           <div className="nav-mobile-actions">
             <Link href="/find-scholarships" className="nav-mobile-btn-primary" onClick={closeAll}>
-              <Sparkles size={15} />
+              <ArrowRight size={15} />
               Find Scholarships
             </Link>
 

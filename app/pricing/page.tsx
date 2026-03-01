@@ -14,23 +14,6 @@ export const metadata: Metadata = generateSEO({
 
 /* ─── Inline styles (no Tailwind dependency for new classes) ──────────────── */
 const STYLES = `
-  @import url('https://fonts.googleapis.com/css2?family=Cormorant+Garant:ital,wght@0,400;0,600;0,700;1,400;1,600&family=Sora:wght@300;400;500;600&display=swap');
-
-  :root {
-    --midnight: #080D1A;
-    --navy: #0E1729;
-    --navy-light: #172038;
-    --gold: #E8A020;
-    --gold-light: #F5C55A;
-    --terra: #C45A2A;
-    --terra-light: #E07848;
-    --cream: #F5EDD6;
-    --ivory: #FDF8F0;
-    --soft: #C4CFDF;
-    --success: #22C55E;
-    --success-dim: rgba(34,197,94,0.12);
-  }
-
   .pr-page {
     font-family: 'Sora', sans-serif;
     background: var(--midnight);
@@ -77,9 +60,9 @@ const STYLES = `
     display: inline-flex;
     align-items: center;
     gap: 8px;
-    background: var(--success-dim);
-    border: 1px solid rgba(34,197,94,0.25);
-    color: var(--success);
+    background: rgba(232,160,32,0.12);
+    border: 1px solid rgba(232,160,32,0.3);
+    color: var(--gold-light);
     font-size: 12px;
     font-weight: 600;
     letter-spacing: 0.1em;
@@ -92,7 +75,7 @@ const STYLES = `
   .pr-badge-dot {
     width: 6px; height: 6px;
     border-radius: 50%;
-    background: var(--success);
+    background: var(--gold);
     animation: pulse 2s ease infinite;
   }
 
@@ -286,12 +269,12 @@ const STYLES = `
   .pr-feat-check {
     width: 16px; height: 16px;
     border-radius: 50%;
-    background: var(--success-dim);
-    border: 1px solid rgba(34,197,94,0.3);
+    background: rgba(232,160,32,0.12);
+    border: 1px solid rgba(232,160,32,0.3);
     display: flex; align-items: center; justify-content: center;
     flex-shrink: 0;
     margin-top: 1px;
-    color: var(--success);
+    color: var(--gold);
     font-size: 9px;
   }
 

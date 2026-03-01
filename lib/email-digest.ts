@@ -194,7 +194,7 @@ export async function sendDigestEmail(digest: DigestEmail): Promise<boolean> {
           <small style="color: #999;">${match.scholarship.country} • ${match.scholarship.deadline}</small>
         </td>
         <td style="padding: 16px; text-align: center;">
-          <span style="background-color: #4f46e5; color: white; padding: 4px 8px; border-radius: 4px; font-weight: bold;">
+          <span style="background-color: #E8A020; color: #080D1A; padding: 4px 8px; border-radius: 4px; font-weight: bold;">
             ${match.score}% Match
           </span>
         </td>
@@ -215,7 +215,7 @@ export async function sendDigestEmail(digest: DigestEmail): Promise<boolean> {
               <small style="color: #999;">${gem.scholarship.country} • $${gem.scholarship.amount.toLocaleString()}</small>
             </td>
             <td style="padding: 12px; text-align: center;">
-              <span style="background-color: #8b5cf6; color: white; padding: 3px 6px; border-radius: 3px; font-size: 12px; font-weight: bold;">
+              <span style="background-color: #C45A2A; color: white; padding: 3px 6px; border-radius: 3px; font-size: 12px; font-weight: bold;">
                 ${gem.score}% Match
               </span>
             </td>
@@ -233,19 +233,20 @@ export async function sendDigestEmail(digest: DigestEmail): Promise<boolean> {
         <style>
           body { font-family: Arial, sans-serif; line-height: 1.6; color: #333; }
           .container { max-width: 600px; margin: 0 auto; }
-          .header { background-color: #4f46e5; color: white; padding: 20px; text-align: center; border-radius: 4px 4px 0 0; }
+          .header { background-color: #080D1A; color: #F5EDD6; padding: 20px; text-align: center; border-radius: 4px 4px 0 0; border-bottom: 2px solid #E8A020; }
           .content { background-color: #f9fafb; padding: 20px; }
           .section { margin-bottom: 24px; }
           .section-title { font-size: 18px; font-weight: bold; margin-bottom: 12px; color: #1f2937; }
           table { width: 100%; border-collapse: collapse; }
           .cta-button { 
             display: inline-block; 
-            background-color: #4f46e5; 
-            color: white; 
+            background-color: #E8A020; 
+            color: #080D1A; 
             padding: 10px 20px; 
             text-decoration: none; 
             border-radius: 4px;
             margin-top: 12px;
+            font-weight: 600;
           }
           .footer { background-color: #f3f4f6; padding: 12px; text-align: center; font-size: 12px; color: #6b7280; }
         </style>
@@ -291,7 +292,7 @@ export async function sendDigestEmail(digest: DigestEmail): Promise<boolean> {
 
           <div class="footer">
             <p style="margin: 0;">
-              © 2024 AILES Platform. We help African students find study abroad opportunities.
+              © 2026 Ailes Global. We help African students find scholarships and study abroad opportunities.
             </p>
           </div>
         </div>

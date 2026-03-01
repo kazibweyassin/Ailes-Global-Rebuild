@@ -51,6 +51,7 @@ type QuickAction = {
 
 export default function AICopilot() {
   const [isOpen, setIsOpen] = useState(false);
+  const [isDismissed, setIsDismissed] = useState(false);
   const [isMinimized, setIsMinimized] = useState(true);
   const [input, setInput] = useState("");
   const [isLoading, setIsLoading] = useState(false);
@@ -64,6 +65,10 @@ export default function AICopilot() {
   const rateLimitCooldownRef = useRef<number>(0);
 
   useEffect(() => {
+    if (typeof window !== "undefined") {
+      const dismissed = localStorage.getItem("ai-copilot-dismissed") === "true";
+      setIsDismissed(dismissed);
+    }
     messagesEndRef.current?.scrollIntoView({ behavior: "smooth" });
   }, [messages]);
 
@@ -456,27 +461,44 @@ export default function AICopilot() {
   ];
 
   return !isOpen ? (
+    isDismissed ? null : (
     <motion.div
       className="fixed bottom-4 right-4 md:bottom-8 md:right-8 z-50"
       initial={{ opacity: 0, scale: 0.8 }}
       animate={{ opacity: 1, scale: 1 }}
       transition={{ duration: 0.3 }}
     >
-      <Button
-        onClick={() => {
-          setIsOpen(true);
-          setIsMinimized(false);
-        }}
-        className="rounded-full h-16 w-16 p-0 shadow-lg bg-primary hover:bg-primary/90"
-      >
-        <Sparkles className="h-6 w-6 md:h-8 md:w-8" />
-      </Button>
+      <div className="relative">
+        <Button
+          onClick={() => {
+            setIsOpen(true);
+            setIsMinimized(false);
+          }}
+          className="rounded-full h-16 w-16 p-0 shadow-lg bg-primary hover:bg-primary/90"
+        >
+          <Sparkles className="h-6 w-6 md:h-8 md:w-8" />
+        </Button>
+        <button
+          onClick={() => {
+            setIsDismissed(true);
+            if (typeof window !== "undefined") {
+              localStorage.setItem("ai-copilot-dismissed", "true");
+            }
+          }}
+          aria-label="Dismiss AI Copilot"
+          className="absolute -top-1 -right-1 w-5 h-5 rounded-full flex items-center justify-center shadow"
+          style={{background:'var(--navy-light)',border:'1px solid rgba(245,237,214,.2)',color:'var(--soft)'}}
+        >
+          <X className="h-3 w-3" />
+        </button>
+      </div>
     </motion.div>
+    )
   ) : (
     <div className="fixed bottom-4 right-4 md:bottom-8 md:right-8 z-50 w-[calc(100vw-2rem)] max-w-md">
-      <Card className="w-full bg-white rounded-xl shadow-xl overflow-hidden flex flex-col">
+      <Card className="w-full rounded-xl shadow-xl overflow-hidden flex flex-col" style={{background:'var(--navy)',border:'1px solid rgba(245,237,214,.12)'}}>
         <div 
-          className="bg-primary text-white p-4 cursor-pointer flex justify-between items-center"
+          className="bg-primary text-primary-foreground p-4 cursor-pointer flex justify-between items-center"
           onClick={() => setIsMinimized(!isMinimized)}
         >
           <div className="flex items-center gap-2">
@@ -530,7 +552,7 @@ export default function AICopilot() {
                             const textarea = document.querySelector('textarea');
                             textarea?.focus();
                           }}
-                          className="w-full text-left p-3 rounded-lg border hover:bg-gray-50 transition-colors"
+                          className="w-full text-left p-3 rounded-lg border transition-colors" style={{borderColor:'rgba(245,237,214,.1)'}} onMouseEnter={e=>(e.currentTarget.style.background='var(--navy-hover)')} onMouseLeave={e=>(e.currentTarget.style.background='')}
                         >
                           <div className="flex items-center gap-3">
                             <div className="p-2 bg-primary/10 rounded-lg text-primary">
@@ -556,8 +578,9 @@ export default function AICopilot() {
                           className={`max-w-[80%] rounded-lg p-3 ${
                             message.isUser
                               ? "bg-primary text-primary-foreground"
-                              : "bg-gray-100"
+                              : "text-[var(--ivory)]"
                           }`}
+                          style={!message.isUser ? { background: 'var(--navy-light)', border: '1px solid rgba(245,237,214,.08)' } : undefined}
                         >
                           {message.type === 'error' ? (
                             <Alert variant="destructive" className="p-2">
@@ -591,7 +614,8 @@ export default function AICopilot() {
                                     href={message.data.previewUrl}
                                     target="_blank"
                                     rel="noopener noreferrer"
-                                    className="text-xs text-blue-600 hover:underline flex items-center gap-1"
+                                    className="text-xs hover:underline flex items-center gap-1"
+                                    style={{color:'var(--gold-light)'}}
                                   >
                                     <FileText className="h-3 w-3" />
                                     <span>View Document</span>
@@ -599,7 +623,8 @@ export default function AICopilot() {
                                   <a
                                     href={message.data.downloadUrl}
                                     download={message.data.name}
-                                    className="text-xs text-blue-600 hover:underline flex items-center gap-1"
+                                    className="text-xs hover:underline flex items-center gap-1"
+                                    style={{color:'var(--gold-light)'}}
                                   >
                                     <svg xmlns="http://www.w3.org/2000/svg" width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
                                       <path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"></path>
@@ -624,7 +649,8 @@ export default function AICopilot() {
                                         {...props} 
                                         target="_blank" 
                                         rel="noopener noreferrer"
-                                        className="text-blue-600 hover:underline"
+                                        className="hover:underline"
+                                        style={{color:'var(--gold-light)'}}
                                       />
                                     )
                                   }}
@@ -637,18 +663,18 @@ export default function AICopilot() {
                                   const sch = match.scholarship;
                                   const daysLeft = Math.ceil((new Date(sch.deadline).getTime() - Date.now()) / (1000 * 60 * 60 * 24));
                                   return (
-                                    <div key={idx} className="border border-gray-200 rounded-lg p-3 bg-white hover:shadow-md transition-shadow">
+                                    <div key={idx} className="rounded-lg p-3 transition-shadow hover:shadow-md" style={{background:'var(--navy-light)',border:'1px solid rgba(245,237,214,.1)'}}>
                                       <div className="flex items-start justify-between gap-2 mb-2">
                                         <div className="flex-1">
-                                          <h4 className="font-semibold text-sm text-gray-900 mb-1">{sch.name}</h4>
-                                          <p className="text-xs text-gray-600">{sch.provider}</p>
+                                          <h4 className="font-semibold text-sm mb-1" style={{color:'var(--ivory)'}}>{sch.name}</h4>
+                                          <p className="text-xs" style={{color:'var(--soft)'}}>{sch.provider}</p>
                                         </div>
                                         <div className="text-right">
                                           <div className="text-xs font-bold text-primary">{match.matchScore}%</div>
-                                          <div className="text-xs text-gray-500">Match</div>
+                                          <div className="text-xs" style={{color:'var(--muted)'}}>Match</div>
                                         </div>
                                       </div>
-                                      <div className="flex items-center gap-4 text-xs text-gray-600 mb-2">
+                                      <div className="flex items-center gap-4 text-xs mb-2" style={{color:'var(--soft)'}}>
                                         <span>💰 {sch.currency} {sch.amount?.toLocaleString() || 'Varies'}</span>
                                         <span>📍 {sch.country}</span>
                                         <span>⏰ {daysLeft}d left</span>
@@ -656,7 +682,7 @@ export default function AICopilot() {
                                       {match.matchReasons && match.matchReasons.length > 0 && (
                                         <div className="mb-2">
                                           <p className="text-xs text-green-700 font-medium mb-1">Why it matches:</p>
-                                          <ul className="text-xs text-gray-600 space-y-0.5">
+                                          <ul className="text-xs space-y-0.5" style={{color:'var(--soft)'}}>
                                             {match.matchReasons.slice(0, 2).map((reason: string, rIdx: number) => (
                                               <li key={rIdx}>✓ {reason}</li>
                                             ))}
@@ -674,7 +700,7 @@ export default function AICopilot() {
                                 })}
                               </div>
                               {message.matches.length > 5 && (
-                                <p className="text-xs text-gray-500 text-center">
+                                <p className="text-xs text-center" style={{color:'var(--muted)'}}>
                                   +{message.matches.length - 5} more matches available
                                 </p>
                               )}
@@ -687,7 +713,7 @@ export default function AICopilot() {
                                     const inline = !className || !className.includes('language-');
                                     const match = /language-(\w+)/.exec(className || '');
                                     return !inline && match ? (
-                                      <pre className={`language-${match[1]} bg-gray-100 p-4 rounded overflow-x-auto`}>
+                                      <pre className={`language-${match[1]} p-4 rounded overflow-x-auto`} style={{background:'var(--navy-light)' as string}}>
                                         <code className={className} {...props}>
                                           {children}
                                         </code>
@@ -703,7 +729,8 @@ export default function AICopilot() {
                                       {...props} 
                                       target="_blank" 
                                       rel="noopener noreferrer"
-                                      className="text-blue-600 hover:underline"
+                                      className="hover:underline"
+                                      style={{color:'var(--gold-light)'}}
                                     />
                                   )
                                 }}
@@ -723,11 +750,11 @@ export default function AICopilot() {
                     ))}
                     {isLoading && (
                       <div className="flex justify-start">
-                        <div className="max-w-[80%] rounded-lg p-3 bg-gray-100">
+                        <div className="max-w-[80%] rounded-lg p-3" style={{background:'var(--navy-light)',border:'1px solid rgba(245,237,214,.08)'}}>
                           <div className="flex space-x-2">
-                            <div className="w-2 h-2 rounded-full bg-gray-400 animate-bounce" style={{ animationDelay: '0ms' }}></div>
-                            <div className="w-2 h-2 rounded-full bg-gray-400 animate-bounce" style={{ animationDelay: '150ms' }}></div>
-                            <div className="w-2 h-2 rounded-full bg-gray-400 animate-bounce" style={{ animationDelay: '300ms' }}></div>
+                            <div className="w-2 h-2 rounded-full animate-bounce" style={{ background:'var(--gold)', animationDelay: '0ms' }}></div>
+                            <div className="w-2 h-2 rounded-full animate-bounce" style={{ background:'var(--gold)', animationDelay: '150ms' }}></div>
+                            <div className="w-2 h-2 rounded-full animate-bounce" style={{ background:'var(--gold)', animationDelay: '300ms' }}></div>
                           </div>
                         </div>
                       </div>

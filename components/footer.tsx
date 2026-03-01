@@ -2,7 +2,6 @@ import Link from "next/link";
 import Image from "next/image";
 
 const STYLES = `
-  @import url('https://fonts.googleapis.com/css2?family=Cormorant+Garant:ital,wght@0,600;0,700;1,600&family=Sora:wght@300;400;500;600&display=swap');
 
   .ag-footer {
     font-family: 'Sora', sans-serif;
@@ -250,9 +249,22 @@ export function Footer() {
           </Link>
 
           <p className="ag-footer-tagline">
-            Africa's #1 scholarship-first platform. Empowering African students —
+            Africa&apos;s #1 scholarship-first platform. Empowering African students —
             especially women — to access world-class education globally.
           </p>
+
+          <div style={{ display:"flex", gap:"18px", flexWrap:"wrap", marginBottom:"22px", alignItems:"center" }}>
+            {[
+              ["1,247", "students placed"],
+              ["50+",   "countries"],
+              ["4.9★",  "avg rating"],
+            ].map(([stat, label]) => (
+              <div key={label} style={{ textAlign:"center" }}>
+                <div style={{ fontFamily:"'Cormorant Garant',serif", fontSize:"18px", fontWeight:600, color:"#E8A020", lineHeight:1 }}>{stat}</div>
+                <div style={{ fontSize:"10px", fontWeight:600, letterSpacing:".06em", textTransform:"uppercase", color:"rgba(196,207,223,.4)", marginTop:"3px" }}>{label}</div>
+              </div>
+            ))}
+          </div>
 
           <div className="ag-footer-contacts">
             <a href="mailto:info@ailesglobal.com" className="ag-footer-contact-row">
