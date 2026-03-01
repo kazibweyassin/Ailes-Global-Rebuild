@@ -536,12 +536,12 @@ export default function AICopilot() {
               transition={{ duration: 0.2 }}
               className="overflow-hidden"
             >
-              <div className="p-4 space-y-4 max-h-[60vh] overflow-y-auto">
+              <div className="p-4 space-y-4 max-h-[60vh] overflow-y-auto" style={{color:'var(--ivory)'}}>
                 {messages.length === 0 ? (
                   <div className="space-y-4">
                     <div className="text-center py-4">
                       <h3 className="font-semibold text-lg">How can I help you today?</h3>
-                      <p className="text-sm text-muted-foreground">I'm your AI Scholarship Assistant</p>
+                      <p className="text-sm" style={{color:'var(--soft)'}}>I'm your AI Scholarship Assistant</p>
                     </div>
                     <div className="space-y-3">
                       {quickActions.map((action, index) => (
@@ -560,7 +560,7 @@ export default function AICopilot() {
                             </div>
                             <div>
                               <p className="font-medium">{action.title}</p>
-                              <p className="text-xs text-muted-foreground">{action.description}</p>
+                              <p className="text-xs" style={{color:'var(--soft)'}}>{action.description}</p>
                             </div>
                           </div>
                         </button>
@@ -596,7 +596,7 @@ export default function AICopilot() {
                                 <FileText className="h-4 w-4 flex-shrink-0" />
                                 <span className="text-sm font-medium truncate max-w-[200px]">{message.data?.name}</span>
                                 {message.status === 'sending' ? (
-                                  <span className="text-xs text-muted-foreground ml-auto">
+                                  <span className="text-xs ml-auto" style={{color:'var(--soft)'}}>
                                     {message.data?.progress}%
                                   </span>
                                 ) : message.status === 'error' ? (
@@ -681,7 +681,7 @@ export default function AICopilot() {
                                       </div>
                                       {match.matchReasons && match.matchReasons.length > 0 && (
                                         <div className="mb-2">
-                                          <p className="text-xs text-green-700 font-medium mb-1">Why it matches:</p>
+                                          <p className="text-xs font-medium mb-1" style={{color:'#4ADE80'}}>Why it matches:</p>
                                           <ul className="text-xs space-y-0.5" style={{color:'var(--soft)'}}>
                                             {match.matchReasons.slice(0, 2).map((reason: string, rIdx: number) => (
                                               <li key={rIdx}>✓ {reason}</li>
@@ -690,7 +690,7 @@ export default function AICopilot() {
                                         </div>
                                       )}
                                       <Link href={`/scholarships/${sch.id}`}>
-                                        <Button size="sm" variant="outline" className="w-full mt-2 text-xs">
+                                        <Button size="sm" variant="outline" className="w-full mt-2 text-xs" style={{borderColor:'rgba(245,237,214,.25)',color:'var(--gold)',background:'transparent'}}>
                                           View Details
                                           <ArrowRight className="h-3 w-3 ml-1" />
                                         </Button>
@@ -764,13 +764,14 @@ export default function AICopilot() {
                 )}
               </div>
 
-              <form onSubmit={handleSendMessage} className="p-4 border-t">
+              <form onSubmit={handleSendMessage} className="p-4" style={{borderTop:'1px solid rgba(245,237,214,.12)'}}>
                 <div className="relative">
                   <Textarea
                     value={input}
                     onChange={(e) => setInput(e.target.value)}
                     placeholder="Ask me anything about scholarships..."
-                    className="pr-24 resize-none"
+                    className="pr-24 resize-none placeholder:text-[var(--soft)]"
+                    style={{background:'var(--navy-light)',color:'var(--ivory)',borderColor:'rgba(245,237,214,.2)'}}
                     rows={2}
                     disabled={isProcessing}
                     onKeyDown={(e) => {
@@ -797,7 +798,8 @@ export default function AICopilot() {
                     />
                     <label 
                       htmlFor="document-upload"
-                      className="p-1.5 rounded-md hover:bg-muted cursor-pointer text-muted-foreground hover:text-foreground transition-colors"
+                      className="p-1.5 rounded-md cursor-pointer transition-colors"
+                      style={{color:'var(--soft)'}}
                       title="Upload document"
                     >
                       <FileUp className="h-4 w-4" />
