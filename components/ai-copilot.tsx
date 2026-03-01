@@ -239,6 +239,144 @@ export default function AICopilot() {
     }
   };
 
+  // ─── FAQ Template Engine (no API needed) ─────────────────────────────────
+  const FAQ_TEMPLATES: { keywords: string[]; answer: string }[] = [
+    {
+      keywords: ['hello', 'hi', 'hey', 'good morning', 'good afternoon', 'greetings', 'start'],
+      answer: `👋 Hello! I'm your **Scholarship Copilot** from Ailes Global.\n\nI can help you with:\n- 🎓 Finding scholarships that match your profile\n- 📝 Understanding application requirements\n- 💰 Learning about funding amounts & deadlines\n- 🌍 Studying abroad in the USA, UK, Canada, Europe & more\n- 📄 Tips for writing winning essays\n\nWhat would you like to know? Type your question below!`
+    },
+    {
+      keywords: ['what is ailes', 'about ailes', 'who are you', 'what do you do', 'about this platform'],
+      answer: `**Ailes Global** is Africa's #1 scholarship-first study abroad platform.\n\nWe help African students — especially women — find fully-funded scholarships, match with top universities worldwide, and navigate the entire application process.\n\n🌟 **What sets us apart:**\n- Curated database of 500+ active scholarships\n- AI-powered profile matching\n- Step-by-step application guidance\n- Expert consultants available\n\nReady to start your journey? 🚀`
+    },
+    {
+      keywords: ['fully funded', 'full scholarship', '100%', 'free scholarship', 'full funding'],
+      answer: `✅ **Fully Funded Scholarships** cover everything:\n\n- ✈️ Flight tickets (in most cases)\n- 🏠 Accommodation & living allowance\n- 📚 Tuition fees (100%)\n- 🍽️ Monthly stipend\n- 📖 Books & study materials\n\n**Top fully-funded programs for Africans:**\n1. **Chevening** (UK) — up to £18,000/year\n2. **MasterCard Foundation** (various universities)\n3. **DAAD** (Germany) — full funding + stipend\n4. **Aga Khan** Foundation\n5. **OFID** Scholarship\n\nWould you like help finding ones that match your field of study?`
+    },
+    {
+      keywords: ['gpa', 'grades', 'cgpa', 'grade requirement', 'academic requirement', 'minimum grade'],
+      answer: `📊 **GPA Requirements vary by scholarship:**\n\n| Scholarship | Minimum GPA |\n|---|---|\n| Chevening (UK) | No fixed minimum |\n| Fulbright (USA) | ~3.0 / Second Class Upper |\n| DAAD (Germany) | Above average |\n| MasterCard Foundation | 3.0+ |\n| Commonwealth | Second Class Upper+ |\n\n💡 **Key tip:** A lower GPA can be offset by:\n- Strong recommendation letters\n- Leadership & community work\n- A compelling personal statement\n- Research/work experience\n\nDon't let grades stop you from applying!`
+    },
+    {
+      keywords: ['deadline', 'when to apply', 'application deadline', 'closing date', 'last date'],
+      answer: `📅 **Key Scholarship Deadlines to Know:**\n\n**January – March:** DAAD (Germany), Rhodes Scholarship\n**March – June:** Various university scholarships open\n**October – December:** Chevening, Fulbright, Commonwealth, Gates Cambridge\n\n⚠️ **Pro tip:** Most top scholarships open **12 months before** the program starts. Start preparing NOW even if the deadline is months away.\n\nVisit our [Scholarships page](/scholarships) to see live deadlines! 🗓️`
+    },
+    {
+      keywords: ['how to apply', 'application process', 'steps to apply', 'how do i apply', 'where to start'],
+      answer: `📝 **How to Apply for Scholarships — Step by Step:**\n\n**Step 1: Build your profile** (2 mins)\n→ Tell us your education level, field, and goals\n\n**Step 2: Get matched**\n→ We show you scholarships with the highest chance of success\n\n**Step 3: Prepare documents**\n- Academic transcripts\n- 2–3 letters of recommendation\n- Personal statement / essay\n- CV / Resume\n- English test results (IELTS/TOEFL if needed)\n\n**Step 4: Submit**\n→ Apply directly on the scholarship's official website\n\n**Step 5: Track & follow up**\n→ Monitor your application status\n\nWant me to help you start? Say **"find scholarships"**! 🎯`
+    },
+    {
+      keywords: ['personal statement', 'essay', 'sop', 'statement of purpose', 'motivation letter', 'cover letter'],
+      answer: `✍️ **Writing a Winning Personal Statement:**\n\n**Structure (800–1000 words):**\n1. **Hook** — Start with a powerful story or moment\n2. **Your background** — Academic journey & achievements\n3. **Why this scholarship** — Be specific, research their values\n4. **Career goals** — Where will this degree take you?\n5. **Impact** — How will you serve your community?\n\n**Golden rules:**\n- ❌ Never start with "I was born in..."\n- ✅ Show, don't tell — use real examples\n- ✅ Tailor each essay to the specific scholarship\n- ✅ Get it reviewed by someone else\n- ✅ Check grammar with Grammarly\n\n💡 Want a template? Ask me for **"personal statement template"**!`
+    },
+    {
+      keywords: ['personal statement template', 'essay template', 'sop template'],
+      answer: `📋 **Personal Statement Template:**\n\n---\n**Opening (100 words):**\n*"[Start with a story, challenge, or moment that shaped your passion for your field]"*\n\n**Academic Background (150 words):**\n*"My undergraduate studies in [field] at [university] equipped me with [skills]. I graduated with [GPA/class] and [key achievement]."*\n\n**Why This Program (150 words):**\n*"[Scholarship name] aligns perfectly with my goals because [specific reason tied to their mission]..."*\n\n**Career Goals (200 words):**\n*"Upon completing this program, I intend to [specific goals] in [home country/region]..."*\n\n**Impact & Return (150 words):**\n*"I am committed to [how you'll give back]. Africa needs [your solution] and I am positioned to..."*\n\n**Closing (100 words):**\n*"This scholarship is not just an opportunity for me — it is an investment in [broader impact]..."*\n\n---\n\nCustomize each section with YOUR story. Make it personal! ✨`
+    },
+    {
+      keywords: ['recommendation letter', 'reference letter', 'lor', 'referee', 'recommender'],
+      answer: `📨 **Letters of Recommendation — What You Need to Know:**\n\n**How many:** Usually 2–3 letters required\n\n**Who to ask:**\n- University professors (preferred)\n- Thesis/project supervisors\n- Employers or internship supervisors\n- Community leaders (for leadership scholarships)\n\n**Tips:**\n- Ask at least **2–3 months** before deadline\n- Give your referee your CV, personal statement & scholarship details\n- A specific letter beats a generic one every time\n- Follow up politely if they haven't submitted\n\n**What a great letter includes:**\n- How long they've known you\n- Specific academic/professional examples\n- Your unique strengths\n- A strong endorsement\n\nNeed a template to give your referee? Just ask! 📝`
+    },
+    {
+      keywords: ['ielts', 'toefl', 'english test', 'language requirement', 'english proficiency', 'duolingo english'],
+      answer: `🗣️ **English Language Requirements:**\n\n| Test | Common Minimum |\n|---|---|\n| IELTS Academic | 6.0 – 7.0 |\n| TOEFL iBT | 80 – 100 |\n| Duolingo English | 100 – 120 |\n| PTE Academic | 55 – 65 |\n\n**Scholarships that may waive English tests:**\n- If you studied in English medium for 4+ years\n- Some accept a letter from your university\n- MasterCard Foundation often flexible for African universities\n\n💡 **Prep tips:**\n- Practice daily reading & listening (BBC, podcasts)\n- Take mock tests on the official websites\n- Target 1 point above minimum for safety\n\nIELTS costs ~$250. TOEFL costs ~$245. Plan ahead!`
+    },
+    {
+      keywords: ['chevening', 'uk scholarship', 'british scholarship', 'study in uk', 'united kingdom'],
+      answer: `🇬🇧 **Chevening Scholarship (UK):**\n\n- **Funder:** UK Foreign, Commonwealth & Development Office\n- **Level:** Master's degree (1 year)\n- **Value:** Fully funded — tuition + living + flights + visa\n- **Deadline:** Usually **November each year**\n\n**Eligibility:**\n- Citizen of a Chevening-eligible country (most African countries ✅)\n- 2+ years work experience\n- Bachelor's degree (minimum 2:1)\n- Return to home country after\n\n**What they look for:**\n- Leadership potential\n- Networking ability\n- Ambassadorial qualities\n\n🔗 Apply at: **chevening.org**\n\nWant tips on the Chevening essay questions? Just ask!`
+    },
+    {
+      keywords: ['fulbright', 'usa scholarship', 'american scholarship', 'study in usa', 'united states'],
+      answer: `🇺🇸 **Fulbright Foreign Student Scholarship (USA):**\n\n- **Funder:** U.S. Department of State\n- **Level:** Master's or PhD\n- **Value:** Fully funded — tuition, living, health insurance, flights\n- **Deadline:** Varies by country (~October)\n\n**Eligibility:**\n- Citizen of a Fulbright-participating country ✅\n- Bachelor's degree\n- English proficiency\n- Strong academic record\n\n**Application tips:**\n- Apply through your country's Fulbright Commission\n- Essays must show US-home country cultural exchange value\n- Leadership & community involvement matter a lot\n\n🔗 Visit: **fulbright.org**\n\nAfrica has strong Fulbright acceptance rates — apply! 🎓`
+    },
+    {
+      keywords: ['daad', 'germany scholarship', 'german scholarship', 'study in germany', 'deutschland'],
+      answer: `🇩🇪 **DAAD Scholarships (Germany):**\n\n- **Funder:** German Academic Exchange Service\n- **Level:** Bachelor's, Master's, PhD, Research\n- **Value:** €850–€1,200/month + tuition + travel allowance\n- **Deadline:** Varies by program (Oct–Dec)\n\n**Why Germany?**\n- Most public universities charge **zero tuition** 🎉\n- Strong engineering, sciences, and business programs\n- High quality of life\n\n**Popular DAAD programs for Africans:**\n- Development-Related Postgraduate Courses\n- EPOS — In-Country/In-Region Programmes\n- Research Grants\n\n**Language:** Many programs taught in English.\n\n🔗 Visit: **daad.de/en**`
+    },
+    {
+      keywords: ['mastercard', 'mastercard foundation', 'mcf', 'africa scholarship'],
+      answer: `💳 **MasterCard Foundation Scholars Program:**\n\n- **Target:** Academically talented but financially disadvantaged African youth\n- **Level:** Undergraduate & Graduate\n- **Value:** Fully funded — tuition, accommodation, stipend, flights\n\n**Partner Universities include:**\n- University of Toronto (Canada)\n- Sciences Po (France)\n- University of Edinburgh (UK)\n- African Leadership University\n- And many more across Africa\n\n**What they value:**\n- Leadership & community service\n- Financial need\n- Academic excellence\n- Commitment to give back to Africa\n\n**For women:** Extra priority given to female applicants 👩‍🎓\n\n🔗 Visit: **mastercardfdn.org/scholars**`
+    },
+    {
+      keywords: ['commonwealth', 'commonwealth scholarship', 'csc', 'study commonwealth'],
+      answer: `🌍 **Commonwealth Scholarship (UK):**\n\n- **Funder:** UK Government\n- **Level:** Master's & PhD\n- **Value:** Fully funded — tuition, stipend, flights, thesis grant\n- **Deadline:** Usually **December**\n\n**Eligibility:**\n- Citizens of Commonwealth countries (most African countries ✅)\n- First class or upper second class degree\n- Cannot be currently studying/living in UK\n\n**What they look for:**\n- Academic excellence\n- Potential to contribute to development of your home country\n- Commitment to return home\n\n🔗 Apply through your country's Commonwealth nominating agency\n\nStrong focus on **development impact** — emphasize this in your essays!`
+    },
+    {
+      keywords: ['canadian scholarship', 'study in canada', 'canada university'],
+      answer: `🇨🇦 **Studying in Canada — Key Scholarships:**\n\n1. **Vanier Canada Graduate Scholarship** — PhD students, CAD $50,000/year\n2. **MasterCard Foundation at U of T** — Fully funded undergrad/grad\n3. **University merit awards** — Most Canadian universities offer international awards\n4. **IDRC Research Awards** — Development-focused research\n\n**Why Canada?**\n- Welcoming immigration policies\n- Post-graduation work permit (3 years)\n- Pathway to permanent residency\n- Diverse & multicultural 🍁\n\nAverage tuition: CAD $20,000–35,000/year (before scholarships)`
+    },
+    {
+      keywords: ['australia', 'australian scholarship', 'study in australia', 'australia awards'],
+      answer: `🇦🇺 **Australia Awards Scholarship:**\n\n- **Funder:** Australian Government\n- **Level:** Undergraduate, Master's, PhD\n- **Value:** Fully funded — tuition, living, flights, health\n- **Target:** Developing countries including many African nations\n- **Deadline:** Usually **February**\n\n**Why Australia?**\n- World-class universities (8 in global top 100)\n- Post-study work rights\n- Strong research programs\n\n🔗 Visit: **australiaawards.gov.au**`
+    },
+    {
+      keywords: ['phd', 'doctorate', 'doctoral', 'research degree', 'phd scholarship'],
+      answer: `🔬 **PhD / Doctoral Scholarships for Africans:**\n\n1. **Commonwealth PhD** (UK) — Fully funded\n2. **DAAD Research Grants** (Germany) — €1,200/month\n3. **Fulbright PhD** (USA) — Fully funded\n4. **Swedish Institute** — Full funding inc. family allowance\n5. **ETH Zurich Excellence** (Switzerland)\n6. **OWSD Fellowship** — Women in STEM PhDs\n\n**What PhD funders look for:**\n- Published research or strong research proposal\n- Relevant Master's degree\n- Supervisor confirmation\n- Strong academic references\n\n💡 **Tip:** Email professors directly before applying — a supervisor who wants you is a huge advantage!`
+    },
+    {
+      keywords: ['women', 'female', 'girl', 'gender', 'woman scholarship'],
+      answer: `👩‍🎓 **Scholarships Specifically for Women:**\n\n1. **L'Oréal-UNESCO For Women in Science** — STEM research\n2. **OWSD Fellowship** — Women in STEM PhDs from developing countries\n3. **African Women in Agricultural Research (AWARD)**\n4. **Cartier Women's Initiative** — Women entrepreneurs\n5. **MasterCard Foundation** — Prioritizes women applicants\n6. **Aga Khan Foundation** — Significant female representation\n7. **WomEng** — Women in Engineering\n\n**At Ailes Global, women get extra support because we believe educated women transform communities.** 🌍\n\nWant help finding one that fits your field?`
+    },
+    {
+      keywords: ['stem', 'engineering', 'science', 'technology', 'mathematics', 'computer science', 'it scholarship'],
+      answer: `💻 **STEM Scholarships for African Students:**\n\n1. **Google PhD Fellowship** — Computer Science\n2. **Microsoft Research PhD** — Technology fields\n3. **L'Oréal-UNESCO** — Women in Science\n4. **OWSD** — Women in STEM developing countries\n5. **DAAD Engineering** — Germany tech universities\n6. **Carnegie Mellon Africa** — ICT scholarships\n\n**Why STEM is great for scholarships:**\n- High demand = more funding available\n- Strong research grants for PhD students\n- Many companies sponsor international STEM students\n\n🎯 Your field is one of the most funded globally. Apply!`
+    },
+    {
+      keywords: ['business', 'mba', 'management', 'finance', 'economics', 'business scholarship'],
+      answer: `📈 **Business / MBA Scholarships:**\n\n1. **Chevening** (UK) — MBA & business masters\n2. **INSEAD MBA Scholarship** — Need-based & merit\n3. **HEC Paris Excellence** — Top MBA program\n4. **African Development Bank** — Economics & finance\n5. **IMF Institute Scholarship** — Macro-economics focus\n6. **WB JJ WBGSP** — Development economics\n\n**For MBA specifically:**\n- Most top MBAs require 3–5 years work experience\n- GMAT score often needed (~600+)\n- Strong professional references important\n\n💼 Average MBA ROI: 3x salary increase within 5 years!`
+    },
+    {
+      keywords: ['medicine', 'medical', 'health', 'doctor', 'nursing', 'public health'],
+      answer: `🏥 **Medical & Health Scholarships:**\n\n1. **Aga Khan University** — Medical programs in East Africa\n2. **Fogarty International** (NIH) — Global health research\n3. **Commonwealth Medical Scholarship** — Postgrad medicine\n4. **PEPFAR Scholarships** — HIV/AIDS & public health\n5. **WHO/TDR Scholarships** — Tropical disease research\n\n**Public Health is highly funded** — especially if focused on African health challenges (malaria, maternal health, etc.) 🌍\n\n**Note:** Most scholarships are for postgraduate study (MPH, MSc, PhD).`
+    },
+    {
+      keywords: ['law', 'llm', 'legal', 'human rights', 'law scholarship'],
+      answer: `⚖️ **Law & Legal Scholarships:**\n\n1. **Chevening** (UK) — LLM & legal studies\n2. **Oxford Weidenfeld & Hoffmann** — Law & related fields\n3. **Georgetown LLM Merit Awards** (USA)\n4. **Open Society Foundations** — Human rights focus\n5. **Human Rights Watch Fellowships**\n\n**High demand areas:**\n- International human rights law\n- Environmental law\n- Trade & investment law\n\n💡 **Tip:** Highlight how your legal career will serve justice in Africa — scholarship committees love this narrative! 🌍`
+    },
+    {
+      keywords: ['interview', 'scholarship interview', 'prepare interview', 'interview tips', 'selection interview'],
+      answer: `🎤 **Scholarship Interview Preparation:**\n\n**Common questions you WILL be asked:**\n1. "Tell me about yourself"\n2. "Why do you deserve this scholarship?"\n3. "What are your career goals?"\n4. "How will you use this education to help your community?"\n5. "Why this country/university?"\n6. "What's your biggest challenge and how did you overcome it?"\n\n**Tips to nail it:**\n- Research the scholarship's mission deeply\n- Prepare specific examples (use STAR method)\n- Practice out loud with a friend or mirror\n- Dress professionally even for video interviews\n- Ask thoughtful questions at the end\n\n⏱️ Most interviews are 20–30 minutes. Be concise but impactful!`
+    },
+    {
+      keywords: ['cv', 'resume', 'curriculum vitae', 'academic cv'],
+      answer: `📄 **Scholarship CV / Academic CV Tips:**\n\n**Structure:**\n1. Personal Info — Name, contacts, LinkedIn\n2. Education — Degrees, GPA, institutions\n3. Work Experience — Most recent first\n4. Research & Publications — If any\n5. Awards & Honours\n6. Leadership & Volunteering — **Very important!**\n7. Skills — Languages, tech, other\n8. References — 2–3 contacts\n\n**Rules:**\n- Max 2 pages for Master's, 3–4 for PhD\n- Use clean, professional formatting\n- Tailor it slightly for each scholarship\n- Use **action verbs**: Led, Coordinated, Developed, Managed\n\nWant a section-by-section template? Just ask! ✍️`
+    },
+    {
+      keywords: ['cost', 'fees', 'how much', 'price', 'ailes global fee', 'service fee'],
+      answer: `💰 **Ailes Global Services:**\n\n- **Browsing scholarships** — Free ✅\n- **AI scholarship matching** — Free ✅\n- **Basic guidance** — Free ✅\n\nFor premium personalized consulting (essay review, application strategy, 1-on-1 mentoring), reach out via our [Contact page](/contact).\n\n🎯 The best scholarships are **completely free to apply** to. You should never pay to apply for a legitimate scholarship. If anyone charges you to apply, it may be a scam! ⚠️`
+    },
+    {
+      keywords: ['scam', 'fake scholarship', 'fraud', 'legitimate', 'real scholarship', 'is it real'],
+      answer: `⚠️ **How to Spot Scholarship Scams:**\n\n**Red flags:**\n- ❌ You have to pay to apply or receive the award\n- ❌ You "won" without applying\n- ❌ They ask for your bank account details\n- ❌ Poor grammar on official communications\n- ❌ No verifiable official website\n- ❌ Pressure to respond immediately\n\n**Legitimate scholarships:**\n- ✅ Always free to apply\n- ✅ Have official government or institutional websites\n- ✅ Found on university websites or official portals\n\n**Safe places to find scholarships:**\n- ailesglobal.com (us! 😊)\n- scholars4dev.com\n- opportunitiesforafricans.com`
+    },
+    {
+      keywords: ['rejection', 'rejected', 'failed', 'not selected', 'what if i fail', 'unsuccessful'],
+      answer: `💪 **Got Rejected? Here's What To Do:**\n\n**First — It's normal!** Even the strongest applicants get rejected. Chevening success rate is ~3%. Keep going.\n\n**Immediate steps:**\n1. Request feedback (some scholarships provide it)\n2. Identify what was weak — essay? Interview? Grades?\n3. Work on those areas for 6 months\n\n**Reapplying:**\n- Most scholarships allow you to reapply next cycle\n- Many winners got in on their **2nd or 3rd attempt**\n- Your application will be stronger each time\n\n**Meanwhile:**\n- Apply to 5–10 scholarships simultaneously\n- Explore local funding options & university scholarships\n\n🌟 Every "no" is one step closer to your "yes"!`
+    },
+    {
+      keywords: ['contact', 'speak to someone', 'human', 'consultant', 'advisor', 'help me'],
+      answer: `📞 **Talk to an Ailes Global Advisor:**\n\nOur team of expert consultants is ready to give you personalized guidance!\n\n👉 Visit our [Contact page](/contact) to:\n- Book a free 15-minute discovery call\n- Send us a message\n- Connect on WhatsApp\n\nWe've helped students win scholarships worth **$50,000–$150,000** — your dream is achievable! 🌟`
+    },
+    {
+      keywords: ['find scholarship', 'match scholarship', 'which scholarship', 'suggest scholarship', 'recommend scholarship', 'scholarship for me'],
+      answer: `🎯 **Finding Your Best-Fit Scholarship:**\n\nTo match you with the right scholarships, I need to know:\n\n1. **What's your current education level?** (Bachelor's, Master's, PhD?)\n2. **What field do you study?** (Engineering, Business, Medicine, etc.)\n3. **Which country would you like to study in?**\n4. **What's your nationality?**\n5. **Do you have work experience?**\n\n📝 Share these details and I'll suggest the best scholarships for your profile!\n\nOr visit our [Scholarships page](/scholarships) for AI-powered matching! 🚀`
+    },
+    {
+      keywords: ['thank', 'thanks', 'thank you', 'helpful', 'great', 'amazing', 'awesome'],
+      answer: `😊 You're so welcome! That's what I'm here for.\n\nRemember — your education journey starts with a single application. **You've got this!** 💪\n\nFeel free to ask me anything else about scholarships, universities, essays, or studying abroad.\n\nGood luck — we're rooting for you at Ailes Global! 🌍✨`
+    },
+  ];
+
+  const getTemplateResponse = (userInput: string): string => {
+    const lower = userInput.toLowerCase().trim();
+    for (const faq of FAQ_TEMPLATES) {
+      if (faq.keywords.some(kw => lower.includes(kw))) {
+        return faq.answer;
+      }
+    }
+    return `🤔 Great question! Here's how I can help:\n\n- 🎓 **Find scholarships** — tell me your field & level of study\n- 📝 **Application tips** — ask about essays, CVs, interviews\n- 🌍 **Country-specific** — ask about UK, USA, Germany, Canada, etc.\n- 💡 **Eligibility** — ask about GPA, work experience, language tests\n\n**Popular questions to try:**\n- "What are fully funded scholarships?"\n- "How do I write a personal statement?"\n- "Scholarships for women in STEM"\n- "How to apply for Chevening"\n\nOr visit our [Scholarships page](/scholarships) to browse & filter live opportunities! 🚀`;
+  };
+
   const handleSendMessage = async (e: React.FormEvent) => {
     e.preventDefault();
     
@@ -320,62 +458,20 @@ export default function AICopilot() {
         msg.id === userMessage.id ? { ...msg, status: 'sent' } : msg
       ));
 
-      // Get finder data from localStorage for context
-      const finderData = localStorage.getItem("scholarshipFinderData");
-      const parsedFinderData = finderData ? JSON.parse(finderData) : null;
+      // Simulate brief typing delay for realism
+      await new Promise(resolve => setTimeout(resolve, 600 + Math.random() * 700));
 
-      // Regular AI chat
-      const response = await fetch("/api/ai/chat", {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ 
-          message: input,
-          context: {
-            activeApplication,
-            applications,
-            finderData: parsedFinderData,
-            command: input.startsWith('/') ? input.slice(1) : undefined
-          }
-        }),
-      });
-
-      const data = await response.json();
-
-      if (!response.ok) {
-        console.error("API Error:", data);
-        throw new Error(data.error || data.details || `HTTP error! status: ${response.status}`);
-      }
-
-      if (data.error) {
-        console.error("API returned error:", data);
-        throw new Error(data.error);
-      }
-      
+      const reply = getTemplateResponse(input);
       const aiMessage: Message = {
         id: `ai-${Date.now()}`,
-        content: data.reply || "I'm sorry, I couldn't generate a response. Please try again.",
+        content: reply,
         isUser: false,
         timestamp: new Date(),
-        type: data.type || 'text',
-        data: data.data,
-        matches: data.matches
+        type: 'text',
       };
 
       setMessages(prev => [...prev, aiMessage]);
       playSound('receive');
-
-      // Handle application updates from the AI
-      if (data.type === 'application_update' && data.data) {
-        const updatedApplications = applications.map(app => 
-          app.id === data.data.id ? { ...app, ...data.data } : app
-        );
-        
-        setApplications(updatedApplications);
-        
-        if (activeApplication?.id === data.data.id) {
-          setActiveApplication(prev => prev ? { ...prev, ...data.data } : prev);
-        }
-      }
     } catch (error: any) {
       console.error("Error sending message:", error);
       
