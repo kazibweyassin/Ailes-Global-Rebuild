@@ -1215,6 +1215,80 @@ const STYLES = `
   @media (max-width: 600px) { .footer-strip { padding: 20px 24px; } }
   .footer-strip a { color: var(--gold); text-decoration: none; }
   .footer-strip a:hover { color: var(--gold-light); }
+
+  /* ─── MOBILE FIXES ──────────────────────────────────────────────────────── */
+
+  /* Hero search: shrink button so input isn't cramped at 375px */
+  @media (max-width: 520px) {
+    .hero-search { padding: 5px 5px 5px 14px; gap: 8px; margin-top: 20px; }
+    .hero-search-btn { padding: 10px 14px; font-size: 12px; gap: 4px; }
+    .hero-search-btn svg { display: none; }
+    .search-btn-full { display: none; }
+    .search-btn-short { display: inline; }
+    .hero-chips { gap: 6px; }
+    .hero-chip { font-size: 11px; padding: 4px 10px; }
+  }
+  @media (min-width: 521px) {
+    .search-btn-full { display: inline; }
+    .search-btn-short { display: none; }
+  }
+
+  /* Hero proof row: wrap + hide dividers so it doesn't overflow at 375px */
+  @media (max-width: 600px) {
+    .hero-proof { flex-wrap: wrap; justify-content: center; gap: 8px 14px; }
+    .hero-proof-divider { display: none; }
+    .hero-proof-text { font-size: 12px; }
+  }
+
+  /* Step card: reduce internal padding in single-column layout */
+  @media (max-width: 640px) {
+    .step-card { padding: 36px 24px; }
+    .step-num { font-size: 60px; top: 16px; right: 20px; }
+  }
+
+  /* Copilot features: single column on mobile */
+  @media (max-width: 640px) {
+    .copilot-saves { grid-template-columns: 1fr; gap: 10px; }
+    .copilot-visual { padding: 20px 16px; }
+    .copilot-response { word-break: break-word; overflow-wrap: break-word; }
+    .copilot-typing { font-size: 12px; }
+  }
+
+  /* Testimonial badge: remove auto left margin when avatar row wraps */
+  @media (max-width: 500px) {
+    .testi-card { padding: 24px 20px; }
+    .testi-badge { margin-left: 0; margin-top: 8px; }
+    .testi-avatar { flex-direction: column; align-items: flex-start; }
+    .testi-avatar-img { width: 40px; height: 40px; }
+  }
+
+  /* CTA actions: stack vertically on small phones */
+  @media (max-width: 480px) {
+    .cta-actions { flex-direction: column; align-items: center; }
+    .cta-actions a, .cta-actions span { width: 100%; max-width: 280px; justify-content: center; text-align: center; }
+  }
+
+  /* Institutions image: shorter on small phones */
+  @media (max-width: 480px) {
+    .institutions-img-panel { height: 220px; }
+  }
+
+  /* Destination cards: reduce internal padding on mobile */
+  @media (max-width: 480px) {
+    .dest-card { padding: 18px; min-height: 220px; }
+    .dest-name { font-size: 20px; }
+    .dest-card-bg-flag { font-size: 80px; }
+  }
+
+  /* Sponsor section: body text */
+  @media (max-width: 480px) {
+    .sponsor-body { font-size: 14px; }
+  }
+
+  /* Map strip: hide the left text panel on very small screens to give map more room */
+  @media (max-width: 480px) {
+    .hero-map-strip-inner > div:first-child { display: none; }
+  }
 `;
 
 const DESTINATIONS = [
@@ -1384,7 +1458,8 @@ export default function HomeClient() {
               onKeyDown={(e) => { if(e.key==='Enter') window.location.href='/scholarships?q='+(e.target as HTMLInputElement).value; }}
             />
             <Link href="/find-scholarships" className="hero-search-btn">
-              Find My Match
+              <span className="search-btn-full">Find My Match</span>
+              <span className="search-btn-short">Search</span>
               <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5"><path d="M5 12h14M12 5l7 7-7 7"/></svg>
             </Link>
           </div>

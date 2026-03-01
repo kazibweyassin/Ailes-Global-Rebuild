@@ -463,7 +463,7 @@ export default function AICopilot() {
   return !isOpen ? (
     isDismissed ? null : (
     <motion.div
-      className="fixed bottom-4 right-4 md:bottom-8 md:right-8 z-50"
+      className="fixed bottom-20 right-4 md:bottom-8 md:right-8 z-50"
       initial={{ opacity: 0, scale: 0.8 }}
       animate={{ opacity: 1, scale: 1 }}
       transition={{ duration: 0.3 }}
@@ -495,7 +495,7 @@ export default function AICopilot() {
     </motion.div>
     )
   ) : (
-    <div className="fixed bottom-4 right-4 md:bottom-8 md:right-8 z-50 w-[calc(100vw-2rem)] max-w-md">
+    <div className="fixed bottom-20 right-4 md:bottom-8 md:right-8 z-50 w-[calc(100vw-2rem)] max-w-md">
       <Card className="w-full rounded-xl shadow-xl overflow-hidden flex flex-col" style={{background:'var(--navy)',border:'1px solid rgba(245,237,214,.12)'}}>
         <div 
           className="bg-primary text-primary-foreground p-4 cursor-pointer flex justify-between items-center"
