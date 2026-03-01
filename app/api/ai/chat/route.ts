@@ -315,8 +315,8 @@ export async function POST(req: Request) {
                 } else if (aiClient.type === 'gemini') {
                   // Try multiple model names
                   const modelNames = process.env.GEMINI_MODEL 
-                    ? [process.env.GEMINI_MODEL]
-                    : ['gemini-2.5-flash', 'gemini-2.5-pro', 'gemini-flash-latest'];
+                    ? [process.env.GEMINI_MODEL, 'gemini-2.0-flash-lite']
+                    : ['gemini-2.0-flash-lite'];
                   
                   for (const modelName of modelNames) {
                     try {

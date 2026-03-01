@@ -97,7 +97,7 @@ export async function generateAIResponse(
       // Try multiple model names in order of preference (free tier first)
       const modelNames = process.env.GEMINI_MODEL 
         ? [process.env.GEMINI_MODEL, 'gemini-2.0-flash-lite']
-        : ['gemini-2.0-flash-lite', 'gemini-1.5-flash-latest'];
+        : ['gemini-2.0-flash-lite'];
       
       let lastError: any = null;
       
