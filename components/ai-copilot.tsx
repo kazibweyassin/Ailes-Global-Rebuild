@@ -617,50 +617,52 @@ export default function AICopilot() {
           setIsOpen(true);
           setIsMinimized(false);
         }}
-        className="rounded-full h-16 w-16 p-0 shadow-lg bg-primary hover:bg-primary/90"
+        className="rounded-full h-12 w-12 p-0 shadow-lg border border-gray-200"
+        style={{background:'#ffffff',color:'var(--gold)'}}
       >
-        <Sparkles className="h-6 w-6 md:h-8 md:w-8" />
+        <Sparkles className="h-5 w-5" />
       </Button>
     </motion.div>
   ) : (
-    <div className="fixed bottom-20 right-4 md:bottom-8 md:right-8 z-50 w-[calc(100vw-2rem)] max-w-md">
-      <Card className="w-full rounded-xl shadow-xl overflow-hidden flex flex-col" style={{background:'var(--navy)',border:'1px solid rgba(245,237,214,.12)'}}>
+    <div className="fixed bottom-20 right-4 md:bottom-8 md:right-8 z-50 w-[calc(100vw-2rem)] max-w-xs">
+      <Card className="w-full rounded-xl shadow-xl overflow-hidden flex flex-col" style={{background:'#ffffff',border:'1px solid #e5e7eb'}}>
         <div 
-          className="bg-primary text-primary-foreground p-4 cursor-pointer flex justify-between items-center"
+          className="p-3 cursor-pointer flex justify-between items-center"
+          style={{background:'#ffffff',borderBottom:'2px solid var(--gold)'}}
           onClick={() => setIsMinimized(!isMinimized)}
         >
           <div className="flex items-center gap-2">
-            <Sparkles className="h-5 w-5" />
-            <span className="font-semibold">Scholarship Copilot</span>
+            <Sparkles className="h-4 w-4" style={{color:'var(--gold)'}} />
+            <span className="font-semibold text-sm" style={{color:'#111827'}}>Scholarship Copilot</span>
           </div>
-          <div className="flex items-center gap-2">
+          <div className="flex items-center gap-1">
             <button
               onClick={(e) => {
                 e.stopPropagation();
                 toggleMute();
               }}
-              className="p-1 hover:bg-white/10 rounded"
+              className="p-1 hover:bg-gray-100 rounded"
               title={isMuted ? "Unmute sounds" : "Mute sounds"}
             >
-              {isMuted ? <VolumeX className="h-4 w-4 opacity-60" /> : <Volume2 className="h-4 w-4" />}
+              {isMuted ? <VolumeX className="h-3.5 w-3.5 text-gray-400" /> : <Volume2 className="h-3.5 w-3.5 text-gray-500" />}
             </button>
             <button 
               onClick={(e) => {
                 e.stopPropagation();
                 setIsMinimized(!isMinimized);
               }}
-              className="p-1 hover:bg-white/10 rounded"
+              className="p-1 hover:bg-gray-100 rounded"
             >
-              <ChevronDown className={`h-5 w-5 transition-transform ${isMinimized ? 'rotate-180' : ''}`} />
+              <ChevronDown className={`h-4 w-4 text-gray-500 transition-transform ${isMinimized ? 'rotate-180' : ''}`} />
             </button>
             <button 
               onClick={(e) => {
                 e.stopPropagation();
                 setIsOpen(false);
               }}
-              className="p-1 hover:bg-white/10 rounded"
+              className="p-1 hover:bg-gray-100 rounded"
             >
-              <X className="h-5 w-5" />
+              <X className="h-4 w-4 text-gray-500" />
             </button>
           </div>
         </div>
@@ -674,12 +676,12 @@ export default function AICopilot() {
               transition={{ duration: 0.2 }}
               className="overflow-hidden"
             >
-              <div className="p-4 space-y-4 max-h-[60vh] overflow-y-auto" style={{color:'var(--ivory)'}}>
+              <div className="p-3 space-y-3 max-h-[45vh] overflow-y-auto" style={{color:'#111827'}}>
                 {messages.length === 0 ? (
                   <div className="space-y-4">
-                    <div className="text-center py-4">
-                      <h3 className="font-semibold text-lg">How can I help you today?</h3>
-                      <p className="text-sm" style={{color:'var(--soft)'}}>I'm your AI Scholarship Assistant</p>
+                    <div className="text-center py-3">
+                      <h3 className="font-semibold text-sm text-gray-900">How can I help you today?</h3>
+                      <p className="text-xs text-gray-500 mt-0.5">AI Scholarship Assistant</p>
                     </div>
                     <div className="space-y-3">
                       {quickActions.map((action, index) => (
@@ -690,15 +692,15 @@ export default function AICopilot() {
                             const textarea = document.querySelector('textarea');
                             textarea?.focus();
                           }}
-                          className="w-full text-left p-3 rounded-lg border transition-colors" style={{borderColor:'rgba(245,237,214,.1)'}} onMouseEnter={e=>(e.currentTarget.style.background='var(--navy-hover)')} onMouseLeave={e=>(e.currentTarget.style.background='')}
+                          className="w-full text-left p-2.5 rounded-lg border border-gray-200 hover:bg-gray-50 transition-colors"
                         >
-                          <div className="flex items-center gap-3">
-                            <div className="p-2 bg-primary/10 rounded-lg text-primary">
+                          <div className="flex items-center gap-2.5">
+                            <div className="p-1.5 rounded-lg" style={{background:'#FEF3C7',color:'var(--gold)'}}>
                               {action.icon}
                             </div>
                             <div>
-                              <p className="font-medium">{action.title}</p>
-                              <p className="text-xs" style={{color:'var(--soft)'}}>{action.description}</p>
+                              <p className="font-medium text-xs text-gray-900">{action.title}</p>
+                              <p className="text-xs text-gray-500">{action.description}</p>
                             </div>
                           </div>
                         </button>
@@ -713,12 +715,15 @@ export default function AICopilot() {
                         className={`flex ${message.isUser ? "justify-end" : "justify-start"}`}
                       >
                         <div
-                          className={`max-w-[80%] rounded-lg p-3 ${
+                          className={`max-w-[85%] rounded-lg p-2.5 text-xs ${
                             message.isUser
-                              ? "bg-primary text-primary-foreground"
-                              : "text-[var(--ivory)]"
+                              ? "text-gray-900"
+                              : "text-gray-800"
                           }`}
-                          style={!message.isUser ? { background: 'var(--navy-light)', border: '1px solid rgba(245,237,214,.08)' } : undefined}
+                          style={message.isUser
+                            ? {background:'var(--gold)',color:'#111827'}
+                            : {background:'#f3f4f6',border:'1px solid #e5e7eb'}
+                          }
                         >
                           {message.type === 'error' ? (
                             <Alert variant="destructive" className="p-2">
@@ -888,11 +893,11 @@ export default function AICopilot() {
                     ))}
                     {isLoading && (
                       <div className="flex justify-start">
-                        <div className="max-w-[80%] rounded-lg p-3" style={{background:'var(--navy-light)',border:'1px solid rgba(245,237,214,.08)'}}>
-                          <div className="flex space-x-2">
-                            <div className="w-2 h-2 rounded-full animate-bounce" style={{ background:'var(--gold)', animationDelay: '0ms' }}></div>
-                            <div className="w-2 h-2 rounded-full animate-bounce" style={{ background:'var(--gold)', animationDelay: '150ms' }}></div>
-                            <div className="w-2 h-2 rounded-full animate-bounce" style={{ background:'var(--gold)', animationDelay: '300ms' }}></div>
+                        <div className="rounded-lg p-2.5" style={{background:'#f3f4f6',border:'1px solid #e5e7eb'}}>
+                          <div className="flex space-x-1.5">
+                            <div className="w-1.5 h-1.5 rounded-full bg-gray-400 animate-bounce" style={{ animationDelay: '0ms' }}></div>
+                            <div className="w-1.5 h-1.5 rounded-full bg-gray-400 animate-bounce" style={{ animationDelay: '150ms' }}></div>
+                            <div className="w-1.5 h-1.5 rounded-full bg-gray-400 animate-bounce" style={{ animationDelay: '300ms' }}></div>
                           </div>
                         </div>
                       </div>
@@ -902,15 +907,15 @@ export default function AICopilot() {
                 )}
               </div>
 
-              <form onSubmit={handleSendMessage} className="p-4" style={{borderTop:'1px solid rgba(245,237,214,.12)'}}>
+              <form onSubmit={handleSendMessage} className="p-3" style={{borderTop:'1px solid #e5e7eb'}}>
                 <div className="relative">
                   <Textarea
                     value={input}
                     onChange={(e) => setInput(e.target.value)}
-                    placeholder="Ask me anything about scholarships..."
-                    className="pr-24 resize-none placeholder:text-[var(--soft)]"
-                    style={{background:'var(--navy-light)',color:'var(--ivory)',borderColor:'rgba(245,237,214,.2)'}}
-                    rows={2}
+                    placeholder="Ask about scholarships..."
+                    className="pr-20 resize-none placeholder:text-gray-400 text-xs"
+                    style={{background:'#f9fafb',color:'#111827',borderColor:'#e5e7eb'}}
+                    rows={1}
                     disabled={isProcessing}
                     onKeyDown={(e) => {
                       if (e.key === "Enter" && !e.shiftKey) {
@@ -936,8 +941,8 @@ export default function AICopilot() {
                     />
                     <label 
                       htmlFor="document-upload"
-                      className="p-1.5 rounded-md cursor-pointer transition-colors"
-                      style={{color:'var(--soft)'}}
+                      className="p-1.5 rounded-md cursor-pointer hover:bg-gray-100 transition-colors"
+                      style={{color:'#9ca3af'}}
                       title="Upload document"
                     >
                       <FileUp className="h-4 w-4" />
