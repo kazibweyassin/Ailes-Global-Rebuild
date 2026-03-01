@@ -94,10 +94,10 @@ export async function generateAIResponse(
       });
       return response.choices[0]?.message?.content || 'I could not generate a response.';
     } else if (aiClient.type === 'gemini') {
-      // Try multiple model names in order of preference
+      // Try multiple model names in order of preference (free tier first)
       const modelNames = process.env.GEMINI_MODEL 
-        ? [process.env.GEMINI_MODEL]
-        : ['gemini-2.5-flash', 'gemini-2.5-pro', 'gemini-flash-latest'];
+        ? [process.env.GEMINI_MODEL, 'gemini-1.5-flash']
+        : ['gemini-1.5-flash', 'gemini-1.5-pro'];
       
       let lastError: any = null;
       
