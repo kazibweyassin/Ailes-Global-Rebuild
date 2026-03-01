@@ -458,10 +458,32 @@ export default function AICopilot() {
         msg.id === userMessage.id ? { ...msg, status: 'sent' } : msg
       ));
 
-      // Simulate brief typing delay for realism
-      await new Promise(resolve => setTimeout(resolve, 600 + Math.random() * 700));
+      // Try Gemini API first, fall back to local templates if unavailable
+      let reply: string;
+      try {
+        const finderData = localStorage.getItem("scholarshipFinderData");
+        const parsedFinderData = finderData ? JSON.parse(finderData) : null;
 
-      const reply = getTemplateResponse(input);
+        const response = await fetch("/api/ai/chat", {
+          method: "POST",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify({
+            message: input,
+            context: { activeApplication, applications, finderData: parsedFinderData }
+          }),
+        });
+
+        if (response.ok) {
+          const data = await response.json();
+          reply = data.reply || getTemplateResponse(input);
+        } else {
+          reply = getTemplateResponse(input);
+        }
+      } catch {
+        // API unavailable — use local FAQ templates
+        reply = getTemplateResponse(input);
+      }
+
       const aiMessage: Message = {
         id: `ai-${Date.now()}`,
         content: reply,
