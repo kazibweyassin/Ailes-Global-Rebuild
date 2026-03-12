@@ -1011,13 +1011,13 @@ export default function ScholarshipFinderFlow() {
                   </motion.div>
                 )}
 
-                {/* Upsell */}
+                {/* Next steps cards */}
                 <div className="sf-upsell">
-                  {/* Premium card */}
+                  {/* Free platform card */}
                   <div className="sf-upsell-card">
                     <div className="sf-upsell-head">
-                      <div className="sf-upsell-head-label">Upgrade</div>
-                      <div className="sf-upsell-head-title">Premium Access — $5/mo</div>
+                      <div className="sf-upsell-head-label">All Included — Free</div>
+                      <div className="sf-upsell-head-title">Your Full Platform Access</div>
                     </div>
                     <div className="sf-upsell-body">
                       <ul className="sf-upsell-features">
@@ -1037,26 +1037,26 @@ export default function ScholarshipFinderFlow() {
                           </li>
                         ))}
                       </ul>
-                      <Link href="/find-scholarships" className="btn-gold-full">
-                        Find My Scholarships <ArrowRight size={14} />
+                      <Link href="/scholarships" className="btn-gold-full">
+                        Browse All Scholarships <ArrowRight size={14} />
                       </Link>
                     </div>
                   </div>
 
-                  {/* Expert card */}
+                  {/* Expert consulting card */}
                   <div className="sf-upsell-card">
                     <div className="sf-upsell-head terra">
-                      <div className="sf-upsell-head-label terra">Expert Service</div>
-                      <div className="sf-upsell-head-title">Standard Package</div>
+                      <div className="sf-upsell-head-label terra">Optional</div>
+                      <div className="sf-upsell-head-title">Book Expert Consulting</div>
                     </div>
                     <div className="sf-upsell-body">
                       <ul className="sf-upsell-features">
                         {[
-                          ["Expert writes your SOP",              "Professionally crafted statement"],
-                          ["3–5 scholarship applications",         "Submitted on your behalf"],
+                          ["Expert reviews your SOP",             "Professional feedback & editing"],
+                          ["Application strategy session",        "1-on-1 with an admissions expert"],
                           ["Visa guidance & document checklist",  "Full document support"],
-                          ["WhatsApp support until admission",    "We're with you throughout"],
-                          ["50% refund if not admitted",          "Risk-free guarantee"],
+                          ["WhatsApp support throughout",         "We're with you every step"],
+                          ["Scholarship shortlisting call",       "Personalised to your profile"],
                         ].map(([n, d]) => (
                           <li key={n} className="sf-upsell-feat">
                             <span className="sf-upsell-feat-check" style={{ borderColor: "rgba(196,90,42,0.4)", background: "rgba(196,90,42,0.1)", color: "var(--terra-light)" }}>✓</span>
@@ -1068,7 +1068,7 @@ export default function ScholarshipFinderFlow() {
                         ))}
                       </ul>
                       <Link href="/contact" className="btn-terra-full">
-                        Talk to an Expert <ArrowRight size={14} />
+                        Book a Free Consultation <ArrowRight size={14} />
                       </Link>
                     </div>
                   </div>
