@@ -191,11 +191,11 @@ const NAV_COLS = [
   {
     title: "Company",
     links: [
-      { label: "About Us",       href: "/about" },
-      { label: "Success Stories",href: "/success-stories" },
-      { label: "Work with Us",   href: "/contact" },
-      { label: "For Universities",href: "/sponsor" },
-      { label: "Blog",           href: "/blog" },
+      { label: "About Us",        href: "/about" },
+      { label: "Success Stories", href: "/success-stories" },
+      { label: "For Institutions",href: "/institutions" },
+      { label: "Work with Us",    href: "/contact" },
+      { label: "Blog",            href: "/blog" },
     ],
   },
   {

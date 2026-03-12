@@ -347,6 +347,7 @@ const NAV_ITEMS = [
   { href: "/",                  label: "Home" },
   { href: "/scholarships",      label: "Scholarships" },
   { href: "/university-matcher",label: "Study Abroad" },
+  { href: "/institutions",      label: "Institutions" },
   { href: "/about",             label: "About" },
 ];
 
