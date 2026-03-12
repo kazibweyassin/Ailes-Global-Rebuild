@@ -249,7 +249,7 @@ export default function ScholarshipBlueprintPage() {
                         <span>African-specific scholarships (70% less competition)</span>
                       </li>
                     </ul>
-                    <p className="text-sm text-gray-500 mt-3">Worth: $99</p>
+                    <p className="text-sm text-green-600 mt-3 font-medium">✓ Included free</p>
                   </div>
                 </div>
               </CardContent>

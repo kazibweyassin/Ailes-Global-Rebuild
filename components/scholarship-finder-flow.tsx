@@ -1067,13 +1067,6 @@ export default function ScholarshipFinderFlow() {
                           </li>
                         ))}
                       </ul>
-                      <div className="sf-upsell-price">
-                        <span className="sf-upsell-price-amt">$299</span>
-                        <div>
-                          <span className="sf-upsell-price-period">one-time</span>
-                          <div className="sf-upsell-price-sub">Avg. scholarship won: $18,000</div>
-                        </div>
-                      </div>
                       <Link href="/contact" className="btn-terra-full">
                         Talk to an Expert <ArrowRight size={14} />
                       </Link>

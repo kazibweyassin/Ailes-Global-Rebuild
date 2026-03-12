@@ -705,6 +705,9 @@ export default function DashboardPage() {
                       <Link href="/scholarships/match"    className="db-action-btn primary">
                         <span className="db-action-icon">🎯</span> AI Scholarship Match
                       </Link>
+                      <Link href="/applications"           className="db-action-btn primary">
+                        <span className="db-action-icon">📋</span> My Applications
+                      </Link>
                       <Link href="/scholarships/deadlines" className="db-action-btn ghost">
                         <span className="db-action-icon">📅</span> Deadline Calendar
                       </Link>

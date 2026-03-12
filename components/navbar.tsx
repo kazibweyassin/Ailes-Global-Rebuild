@@ -354,6 +354,7 @@ const NAV_ITEMS = [
 const SERVICES_DROPDOWN = [
   { href: "/services",            label: "All Services" },
   { href: "/university-matcher",  label: "University Matching" },
+  { href: "/applications",        label: "Application Tracker" },
   { href: "/find-scholarships",   label: "Scholarship Search" },
   { href: "/copilot/activate",    label: "AI Copilot" },
   { href: "/consulting",          label: "Expert Consulting" },
