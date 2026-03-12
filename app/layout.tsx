@@ -15,7 +15,7 @@ const MobileBottomNav = dynamic(() => import("@/components/mobile-bottom-nav"), 
 
 export const metadata: Metadata = {
   ...generateSEO({
-    title: "Ailes Global - Premium Study Abroad & Scholarship Consulting",
+    title: "Ailes Global - Free Scholarship Finder for African Students",
     description:
       "Africa's #1 scholarship-first platform. Find fully-funded scholarships, match with top universities, and get expert guidance for studying abroad. Empowering African students, especially women.",
     keywords: [

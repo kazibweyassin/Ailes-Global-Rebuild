@@ -374,10 +374,10 @@ const STYLES = `
 
 /* ─── Data ─── */
 const KPIS = [
-  { num: "85%",   label: "Admission Rate" },
-  { num: "$18K",  label: "Avg Scholarship" },
-  { num: "55hrs", label: "Time Saved" },
-  { num: "127+",  label: "Students Placed" },
+  { num: "1,200+", label: "Active Students" },
+  { num: "$18K",   label: "Avg Scholarship Found" },
+  { num: "50+",    label: "Partner Universities" },
+  { num: "30+",    label: "Countries" },
 ];
 
 
@@ -392,9 +392,9 @@ const SERVICES = [
 ];
 
 const TICKER_ITEMS = [
-  "85% Admission Rate", "500+ Students Helped", "$18K Avg Scholarship",
+  "100% Free For Students", "1,200+ Active Students", "$18K Avg Scholarship Found",
   "50+ Partner Universities", "30+ Countries", "AI-Powered Matching",
-  "24/7 Copilot Support", "50% Refund Guarantee",
+  "24/7 Copilot Support", "10,000+ Scholarships Database",
 ];
 
 export default function ServicesPage() {

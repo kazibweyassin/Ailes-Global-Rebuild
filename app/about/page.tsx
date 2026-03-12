@@ -460,10 +460,10 @@ const STYLES = `
 `;
 
 const STATS = [
-  { num: "500", suffix: "+", label: "Students Helped" },
-  { num: "85",  suffix: "%", label: "Admission Success" },
-  { num: "50",  suffix: "+", label: "Partner Universities" },
-  { num: "30",  suffix: "+", label: "Countries" },
+  { num: "1,200", suffix: "+", label: "Active Students" },
+  { num: "85",    suffix: "%", label: "Admission Success" },
+  { num: "50",    suffix: "+", label: "Partner Universities" },
+  { num: "30",    suffix: "+", label: "Countries" },
 ];
 
 const SERVICES = [
@@ -472,7 +472,7 @@ const SERVICES = [
     tag: "Launched 2024",
     title: <>Study Abroad <em>Consulting</em></>,
     body: "Ailes Global is a comprehensive Study Abroad Platform that helps African students access best-matched higher education opportunities globally. We specialize in scholarships, university matching, and complete application support.",
-    checks: ["500+ Students Helped", "85% Admission Success Rate", "$18K Average Scholarship"],
+    checks: ["1,200+ Active Students", "50+ Countries Reached", "100% Free for Students"],
     cta: { label: "View Our Services", href: "/services" },
     visual: "image",
     src: "/scholars.jpg",

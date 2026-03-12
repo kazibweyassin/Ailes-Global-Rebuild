@@ -130,7 +130,7 @@ export async function sendAdminNotification(data: {
       
       <p>Log in to the admin panel to review and process this sponsorship.</p>
       
-      <a href="http://localhost:3000/admin/sponsors" 
+      <a href="${process.env.NEXTAUTH_URL || 'https://ailesglobal.com'}/admin/sponsors" 
          style="display: inline-block; background: #667eea; color: white; padding: 12px 24px; 
                 text-decoration: none; border-radius: 6px; margin: 20px 0;">
         View in Admin Panel
