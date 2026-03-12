@@ -3,7 +3,8 @@ import React, { useState } from "react";
 import Link from "next/link";
 import {
   Heart, Users, Globe2, ArrowRight, CheckCircle2, Mail,
-  Star, Shield, TrendingUp, Sparkles, Building2
+  Star, Shield, TrendingUp, Sparkles, Building2,
+  BookOpen, GraduationCap, Award
 } from "lucide-react";
 
 /* ─── Styles ─────────────────────────────────────────────────────────────── */
@@ -297,10 +298,16 @@ const STYLES = `
     background: rgba(196,90,42,.04);
   }
 
-  .sp-impact-emoji {
-    font-size: 36px;
+  .sp-impact-icon {
+    width: 52px;
+    height: 52px;
+    border-radius: 12px;
+    background: rgba(196,90,42,.12);
+    display: flex;
+    align-items: center;
+    justify-content: center;
     margin-bottom: 20px;
-    display: block;
+    color: var(--terra-light, #E07040);
   }
   .sp-impact-title {
     font-family: 'Cormorant Garant', serif;
@@ -631,17 +638,17 @@ const STYLES = `
 /* ─── Data ─────────────────────────────────────────────────────────────────── */
 const IMPACT_ITEMS = [
   {
-    emoji: "📚",
+    icon: <BookOpen size={22} />,
     title: "Application Support",
     desc: "Your sponsorship covers access to our AI tools, expert review sessions, and document preparation — giving students an edge they couldn't afford alone.",
   },
   {
-    emoji: "🎓",
+    icon: <GraduationCap size={22} />,
     title: "Scholarship Discovery",
     desc: "We actively match sponsored students to fully-funded scholarships worth $10K–$60K. The best outcome is you sponsor one year, and a scholarship covers the rest.",
   },
   {
-    emoji: "🌍",
+    icon: <Globe2 size={22} />,
     title: "Community Impact",
     desc: "Every student you support sends knowledge, skills, and networks back to their community. Your investment multiplies far beyond one person.",
   },
@@ -909,7 +916,7 @@ export default function SponsorPage() {
           <div className="sp-impact-grid">
             {IMPACT_ITEMS.map((item, i) => (
               <div className="sp-impact-card" key={i}>
-                <span className="sp-impact-emoji">{item.emoji}</span>
+                <div className="sp-impact-icon">{item.icon}</div>
                 <div className="sp-impact-title">{item.title}</div>
                 <div className="sp-impact-desc">{item.desc}</div>
               </div>
@@ -985,7 +992,7 @@ export default function SponsorPage() {
               <div style={{ maxWidth: 600, margin: "0 auto", background: "rgba(46,191,138,.08)", border: "1px solid rgba(46,191,138,.25)", borderRadius: 20, padding: "56px 40px", textAlign: "center" }}>
                 <CheckCircle2 size={48} style={{ color: "#2EBF8A", margin: "0 auto 20px", display: "block" }} />
                 <h3 style={{ fontFamily: "Cormorant Garant, serif", fontSize: 30, color: "var(--ivory, #F8F4EC)", marginBottom: 12 }}>
-                  You're a sponsor! 🎉
+                  You're a sponsor!
                 </h3>
                 <p style={{ fontSize: 15, color: "var(--soft, rgba(245,237,214,.65))", lineHeight: 1.75 }}>
                   Thank you for your generosity. Our team will reach out within 2 business days
