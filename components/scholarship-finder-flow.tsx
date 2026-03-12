@@ -1037,8 +1037,8 @@ export default function ScholarshipFinderFlow() {
                           </li>
                         ))}
                       </ul>
-                      <Link href="/pricing" className="btn-gold-full">
-                        Get Premium — $5/month <ArrowRight size={14} />
+                      <Link href="/find-scholarships" className="btn-gold-full">
+                        Find My Scholarships <ArrowRight size={14} />
                       </Link>
                     </div>
                   </div>

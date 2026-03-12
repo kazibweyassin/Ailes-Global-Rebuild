@@ -125,7 +125,7 @@ export default function ContactPage() {
           <div className="ct-consult-card">
             <p className="ct-consult-title">Free Consultation</p>
             <p className="ct-consult-sub">Book a one-on-one session with our expert consultants â€” no commitment required.</p>
-            <Link href="/pricing" className="ct-consult-btn">
+            <Link href="/find-scholarships" className="ct-consult-btn">
               Schedule Now
               <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5"><path d="M5 12h14M12 5l7 7-7 7"/></svg>
             </Link>

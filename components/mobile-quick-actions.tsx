@@ -34,9 +34,9 @@ function MobileQuickActions() {
       color: "bg-green-100 text-green-600",
     },
     {
-      href: "/pricing",
+      href: "/institutions",
       icon: Calculator,
-      label: "Packages",
+      label: "Institutions",
       color: "bg-primary/10 text-primary",
     },
     {

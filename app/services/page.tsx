@@ -380,36 +380,7 @@ const KPIS = [
   { num: "127+",  label: "Students Placed" },
 ];
 
-const PLANS = [
-  {
-    tier: "Starter",
-    price: "$0",
-    tagline: "Explore on your own",
-    features: ["Browse 10,000+ scholarships", "Basic university search", "AI Copilot (5 queries/day)", "Email support"],
-    cta: { label: "Get Started Free", href: "/scholarships" },
-    featured: false,
-    guarantee: null,
-  },
-  {
-    tier: "Standard",
-    price: "$299",
-    tagline: "Get admitted with funding",
-    tag: "Most Popular",
-    features: ["Everything in Starter", "Personal consultant assigned", "SOP + essay editing (3 rounds)", "Visa application support", "85% success rate"],
-    cta: { label: "Start for $299", href: "/pricing" },
-    featured: true,
-    guarantee: "50% refund guarantee",
-  },
-  {
-    tier: "Premium",
-    price: "$799",
-    tagline: "Maximum success rate",
-    features: ["Everything in Standard", "Priority consultant access", "Unlimited essay revisions", "Interview prep sessions", "92% success rate · $25K+ avg"],
-    cta: { label: "Go Premium", href: "/pricing" },
-    featured: false,
-    guarantee: "Full application refund guarantee",
-  },
-];
+
 
 const SERVICES = [
   { icon: "🎯", title: "AI University Matching",        desc: "Our AI analyzes your profile, academic background, and goals to match you with the perfect universities worldwide.", features: ["Personalized recommendations", "Program-specific suggestions", "Scholarship availability indicators", "Match score breakdown"],             href: "/university-matcher" },
@@ -463,12 +434,12 @@ export default function ServicesPage() {
           </div>
 
           <div className="hero-ctas">
-            <Link href="/pricing" className="btn-gold">
-              View Packages & Pricing
+            <Link href="/find-scholarships" className="btn-gold">
+              Find My Scholarships Free
               <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5"><path d="M5 12h14M12 5l7 7-7 7"/></svg>
             </Link>
-            <Link href="/find-scholarships" className="btn-outline">
-              Browse Scholarships Free
+            <Link href="/institutions" className="btn-outline">
+              For Institutions
             </Link>
           </div>
         </div>
@@ -485,41 +456,7 @@ export default function ServicesPage() {
         </div>
       </div>
 
-      {/* ══ PRICING ══ */}
-      <section className="pricing-section">
-        <div className="pricing-header">
-          <div className="s-label">Simple, Transparent Pricing</div>
-          <h2 className="s-title">Choose your <em>plan</em></h2>
-        </div>
 
-        <div className="pricing-grid">
-          {PLANS.map((plan) => (
-            <div className={`price-card ${plan.featured ? "featured" : ""}`} key={plan.tier}>
-              {plan.tag && <div className="price-tag">{plan.tag}</div>}
-              <div className="price-tier">{plan.tier}</div>
-              <div className="price-amount">{plan.price}</div>
-              <div className="price-tagline">{plan.tagline}</div>
-              <div className="price-divider" />
-              <div className="price-features">
-                {plan.features.map((f) => (
-                  <div className="price-feat" key={f}>
-                    <div className="price-feat-icon">✓</div>
-                    <span className="price-feat-text">{f}</span>
-                  </div>
-                ))}
-              </div>
-              <div className="price-cta">
-                <Link href={plan.cta.href} className={plan.featured ? "btn-gold" : "btn-outline"} style={{ display:"flex", justifyContent:"center" }}>
-                  {plan.cta.label}
-                </Link>
-                {plan.guarantee && (
-                  <div className="price-guarantee">🛡 {plan.guarantee}</div>
-                )}
-              </div>
-            </div>
-          ))}
-        </div>
-      </section>
 
       {/* ══ SERVICES ══ */}
       <section className="services-section">
@@ -567,14 +504,13 @@ export default function ServicesPage() {
           <p className="cta-sub">
             Join 127+ students who got admitted with scholarships.
           </p>
-          <div className="cta-highlight">Starting at $299 · 50% refund guarantee</div>
           <div className="cta-btns">
-            <Link href="/pricing" className="btn-gold">
-              View Packages & Pricing
+            <Link href="/find-scholarships" className="btn-gold">
+              Find My Scholarships Free
               <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5"><path d="M5 12h14M12 5l7 7-7 7"/></svg>
             </Link>
-            <Link href="/find-scholarships" className="btn-outline">
-              Browse Scholarships Free
+            <Link href="/institutions" className="btn-outline">
+              Partner With Us
             </Link>
           </div>
         </div>

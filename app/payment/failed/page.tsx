@@ -66,10 +66,10 @@ function PaymentFailedContent() {
 
             {/* Actions */}
             <div className="space-y-4">
-              <Link href="/pricing">
+              <Link href="/contact">
                 <Button className="w-full" size="lg">
                   <RefreshCw className="h-4 w-4 mr-2" />
-                  Try Payment Again
+                  Contact Us
                 </Button>
               </Link>
 

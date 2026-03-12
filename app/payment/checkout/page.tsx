@@ -127,9 +127,9 @@ function CheckoutContent() {
   return (
     <div className="min-h-screen bg-gray-50 py-12 px-4">
       <div className="max-w-4xl mx-auto">
-        <Link href="/pricing" className="inline-flex items-center text-gray-600 hover:text-primary mb-6">
+        <Link href="/find-scholarships" className="inline-flex items-center text-gray-600 hover:text-primary mb-6">
           <ArrowLeft className="h-4 w-4 mr-2" />
-          Back to Pricing
+          Back to Scholarships
         </Link>
 
         <div className="grid md:grid-cols-2 gap-8">
