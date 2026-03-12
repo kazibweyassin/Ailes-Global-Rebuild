@@ -10,11 +10,29 @@ const config: Config = {
   theme: {
   	extend: {
   		colors: {
+			// ── Brand tokens (match globals.css) ─────────────────────────
 			primary: {
-				DEFAULT: '#2563EB',
-				light: '#E8F0FA',
+				DEFAULT: '#E8A020',   // gold
+				light:   '#F5C55A',   // gold-light
 				foreground: 'hsl(var(--primary-foreground))'
 			},
+			navy: {
+				DEFAULT: '#0E1729',
+				dark:    '#080D1A',
+				light:   '#172038',
+				hover:   '#1C2A48',
+			},
+			gold: {
+				DEFAULT: '#E8A020',
+				light:   '#F5C55A',
+			},
+			terra: {
+				DEFAULT: '#C45A2A',
+				light:   '#E07848',
+			},
+			cream:  '#F5EDD6',
+			ivory:  '#FDF8F0',
+			// ── Neutrals ──────────────────────────────────────────────────
   			secondary: {
   				DEFAULT: 'hsl(var(--secondary))',
   				foreground: 'hsl(var(--secondary-foreground))'
@@ -25,10 +43,10 @@ const config: Config = {
   				light: '#F7F9FC'
   			},
   			success: {
-  				DEFAULT: '#2ECC71'
+  				DEFAULT: '#2EBF8A'
   			},
   			error: {
-  				DEFAULT: '#E63946'
+  				DEFAULT: '#EF4444'
   			},
   			background: 'hsl(var(--background))',
   			foreground: 'hsl(var(--foreground))',

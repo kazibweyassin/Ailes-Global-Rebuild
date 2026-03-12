@@ -353,7 +353,6 @@ const NAV_ITEMS = [
 
 const SERVICES_DROPDOWN = [
   { href: "/services",            label: "All Services" },
-  { href: "/pricing",             label: "Packages & Pricing" },
   { href: "/university-matcher",  label: "University Matching" },
   { href: "/find-scholarships",   label: "Scholarship Search" },
   { href: "/copilot/activate",    label: "AI Copilot" },

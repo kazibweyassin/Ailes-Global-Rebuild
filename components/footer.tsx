@@ -159,7 +159,7 @@ const NAV_COLS = [
     title: "Offerings",
     links: [
       { label: "AI University Finder",       href: "/university-matcher" },
-      { label: "Study Abroad Consulting",    href: "/pricing" },
+      { label: "Study Abroad Consulting",    href: "/consulting" },
       { label: "Scholarship Hub",            href: "/find-scholarships" },
       { label: "Visa & Immigration Support", href: "/services" },
     ],
