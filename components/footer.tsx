@@ -250,7 +250,6 @@ export function Footer() {
 
           <p className="ag-footer-tagline">
             You are 90% more likely to secure scholarships or admission with Ailes Global.
-            especially women — to access world-class education globally.
           </p>
 
           <div style={{ display:"flex", gap:"18px", flexWrap:"wrap", marginBottom:"22px", alignItems:"center" }}>

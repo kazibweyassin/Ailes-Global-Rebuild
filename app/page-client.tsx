@@ -1433,7 +1433,7 @@ export default function HomeClient() {
           {/* Badge */}
           <div className="hero-badge" style={{animation:'fadeUp 0.8s ease both'}}>
             <span className="hero-badge-dot" />
-            You are 90% more likely to secure scholarships or admission with Ailes Global.
+            You are 90% more likely to secure scholarships or admission with Ailes Global
           </div>
 
           {/* Headline */}
