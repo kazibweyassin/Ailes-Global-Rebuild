@@ -249,7 +249,7 @@ export function Footer() {
           </Link>
 
           <p className="ag-footer-tagline">
-            Africa&apos;s #1 scholarship-first platform. Empowering African students —
+            You are 90% more likely to secure scholarships or admission with Ailes Global.
             especially women — to access world-class education globally.
           </p>
 
